@@ -5,40 +5,17 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-
     public int slots;
+    public GameObject itemDatabaseObject;
 
     private int slotsOccupied;
     private int slotSelected;
     private List<Item> array;
-    private Hashtable itemMap;
+    private ItemData itemDatabase;
 
     public Inventory(int size)
     {
         this.slots = size;
-    }
-
-    /// <summary>
-    /// Item subclass
-    /// </summary>
-    public class Item
-    {
-        public string id;
-        public int count;
-        public bool stackable;
-        //add assoc. sprite here eventually
-
-        public Item(string id, int count, bool stackable = true)
-        {
-            if (!stackable && count > 1){
-                Debug.LogWarning("This item is not stackable, yet multiple were specified.");
-                count = 1;
-            }
-            //Debug.Log("Created an item of type " + id + ", and of count " + count.ToString());
-            this.id = id;
-            this.count = count;
-            this.stackable = stackable;
-        }
     }
 
     /// <summary>
@@ -77,12 +54,10 @@ public class Inventory : MonoBehaviour
 
     public int Add(string id, int count)
     {
-
         Debug.Log("Adding " + id);
 
-
         //does this item exist in the game?
-        Item itemDefinition = FetchRefItem(id);
+        Item itemDefinition = itemDatabase.FetchRefItem(id);
         if (itemDefinition == null) { return -1; }
 
         //does this item already exist in the inventory?
@@ -120,7 +95,7 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
-    /// Get the item denoted by 'id' and return it, removing it from the array.
+    /// Get the item(s) denoted by 'id' and return all, removing them from the array.
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -136,50 +111,39 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
-    /// Get the reference item associated with 'id'
+    /// Get 'count' items denoted by 'id' and return them, removing those items from the array.
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    private Item FetchRefItem(string id)
+    public Item Remove(string id, int count)
     {
-        if (itemMap.ContainsKey(id) == false){return null;} //in C#, accessing non-existant keys gives runtime error.
-        return (Item) itemMap[id];
-    }
+        // Ensure the item is present
+        int itemIndex = ItemExists(id);
+        if (itemIndex < 0) { return null; }
 
-    /// <summary>
-    /// Create and populate the item hashtable
-    /// </summary>
-    /// <returns></returns>
-    private Hashtable CreateItemMap()
-    {
-        Hashtable map = new Hashtable();
+        // Check if there's enough items to take 'count'
+        Item item = array[itemIndex];
+        int difference = item.count - count;
 
-        //import all items
-        map.Add("patties", new Item("patties", 1));
-        map.Add("key", new Item("key", 1, false));
-        map.Add("lettuce", new Item("lettuce", 1, false));
-        //Debug.Log("Added three items to the item map");
-        //end import all items
+        // There is more than enough items: return new instance with 'count' items
+        if (difference > 0)
+        {
+            item.count -= count;
+            return new Item(id, count, true);
+        }
+        // There is not enough to have any left over, return the instance in the array.
+        else
+        {
+            array[itemIndex] = null;
+            return item;
+        }
 
-        return map;
-    }
-
-    /// <summary>
-    /// Create the new arraylist used to store array items
-    /// </summary>
-    /// <returns></returns>
-    private List<Item> CreateArray()
-    {
-        return new List<Item>();
     }
 
     public void Start()
     {
-        array   = CreateArray();
-        itemMap = CreateItemMap();
-        
+        array   = new List<Item>();
+        itemDatabase = itemDatabaseObject.GetComponent<ItemData>();
     }
-
-
 
 }
