@@ -8,7 +8,9 @@ public class InteractionController : MonoBehaviour
 {
     public float interactionDistance;
     public GameObject playerCharacterObject;
+    public GameObject playerControllerObject;
     private Queue<Interaction> interactionQueue;
+
     private int interactionSelected;
     private int interactionNumber;
 
@@ -37,14 +39,50 @@ public class InteractionController : MonoBehaviour
     /// </summary>
     private void StageInteractions()
     {
-        textComponent.text = "";
-        while (interactionQueue.Count > 0)
+        string displayText = "";
+        int interactions = interactionQueue.Count;
+        Interaction[] actionArray = new Interaction[interactions];
+
+        if (interactionSelected >= interactions) { interactionSelected = 0; }
+
+        //check player input: for changing interaction selection
+        if (playerControllerObject.GetComponent<PlayerInteractions>().scrollUp){
+            if (interactionSelected != 0) { interactionSelected++; }
+        }
+
+        if (playerControllerObject.GetComponent<PlayerInteractions>().scrollDown){
+            if (interactionSelected != interactions-1){ interactionSelected++; }
+        }
+        
+        //take all interactions from queue and put into array
+        for (int i = 0; i < interactions; i++)
         {
             Interaction interaction = interactionQueue.Dequeue();
-            textComponent.text = interaction.display;
+            actionArray[i] = interaction;
         }
+
+        //go through all interactions in the array and display on screen
+        for (int i = 0;  i < interactions; i++)
+        {
+            if (i == interactionSelected){
+                displayText += ("[ " + actionArray[i].display + " ]\n");
+            }else{
+                displayText += (actionArray[i].display + "\n");
+            }
+        }
+
+        //check player input: for activating the selected interaction
+        if (playerControllerObject.GetComponent<PlayerInteractions>().interactionEnabled){
+            actionArray[interactionSelected].ExecuteInteraction();
+        }
+
+        textComponent.text = displayText;
+            
     }
 
+    /// <summary>
+    /// Setup the text box so it is ready to write to.
+    /// </summary>
     private void setupTextbox()
     {
         interactionQueue = new Queue<Interaction>();
@@ -54,7 +92,7 @@ public class InteractionController : MonoBehaviour
 
         textComponent.text = "";
         textComponent.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-        textComponent.fontSize = 24;
+        textComponent.fontSize = 12;
 
         RectTransform rectTransform = textObject.GetComponent<RectTransform>();
         rectTransform.localPosition = new Vector3(0, -250, 0);
