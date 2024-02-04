@@ -44,15 +44,6 @@ public class InteractionController : MonoBehaviour
         Interaction[] actionArray = new Interaction[interactions];
 
         if (interactionSelected >= interactions) { interactionSelected = 0; }
-
-        //check player input: for changing interaction selection
-        if (playerControllerObject.GetComponent<PlayerInteractions>().scrollUp){
-            if (interactionSelected != 0) { interactionSelected++; }
-        }
-
-        if (playerControllerObject.GetComponent<PlayerInteractions>().scrollDown){
-            if (interactionSelected != interactions-1){ interactionSelected++; }
-        }
         
         //take all interactions from queue and put into array
         for (int i = 0; i < interactions; i++)
