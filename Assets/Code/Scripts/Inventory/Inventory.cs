@@ -129,6 +129,10 @@ public class Inventory : MonoBehaviour
             {
                 invSlotObjectsArray[i].GetComponent<Image>().sprite = item.sprite;
             }
+            else
+            {
+                invSlotObjectsArray[i].GetComponent<Image>().sprite = FetchItemReference("empty").sprite;
+            }
         }
 
         //update highlighter location

@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class Interaction : MonoBehaviour
 {
+    [Tooltip("What does this interaction do?")]
     public INTERACTIONS type;
+
+    [Tooltip("What condition(s) needs to be satisfied first in order for this interaction to be usable?")]
+    public List<INTERACTION_CONDITIONS> condition;
+
     [Tooltip("This is the message that will be displayed to the player.")]
+
     public string display;
 
     [Tooltip("Location to which object should be Created or Moved.")]
@@ -27,6 +33,13 @@ public class Interaction : MonoBehaviour
         moveObject,
         createObject,
         deleteObject
+    }
+
+    public enum INTERACTION_CONDITIONS
+    {
+        itemExistsInInventory,
+        itemInSelectedInventorySlot,
+        globalObjectiveAcheived
     }
 
     public void ExecuteInteraction()
@@ -58,7 +71,7 @@ public class Interaction : MonoBehaviour
         switch (this.type)
         {
             case INTERACTIONS.giveItem:
-                if (itemOfInterest == ""){Debug.LogError("Interaction 'Give Item' not configured: no item specified.");}
+                if (itemOfInterest == ""){ Debug.LogError("Interaction 'Give Item' not configured: no item specified.");}
                 if (qtyOfItem <= 0) { Debug.LogError("Interaction 'Give Item' not configured: qty of 0 set."); }
                 break;
 
@@ -79,6 +92,12 @@ public class Interaction : MonoBehaviour
                 if (objectOfInterest == null) { Debug.LogError("Interaction 'Move Object' not configured: object to move set to null."); }
                 break;
         }
+    }
+
+    public bool Valid()
+    {
+        
+        return false;
     }
 
     public void Awake()

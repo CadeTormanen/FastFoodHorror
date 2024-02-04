@@ -28,7 +28,11 @@ public class InteractionController : MonoBehaviour
             if (Vector3.Distance(child.position, playerCharacterObject.transform.position) <= interactionDistance)
             {
                 Interaction interaction = child.GetComponent<Interaction>();
-                interactionQueue.Enqueue(interaction);
+                if (interaction.Valid() == true)
+                {
+                    interactionQueue.Enqueue(interaction);
+                }
+                
             }
         }
         interactionNumber = interactionQueue.Count;
