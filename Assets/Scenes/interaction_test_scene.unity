@@ -227,6 +227,7 @@ MonoBehaviour:
   slotWidth: 64
   slotHeight: 64
   slotPadding: 2
+  slotSelected: 0
 --- !u!1 &463006574
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,7 +415,7 @@ GameObject:
   - component: {fileID: 660768162}
   - component: {fileID: 660768161}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: grill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -447,12 +448,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff552f4c206f26b47b98835f7cea0cac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  display: Place Patty
+  playerInventoryReference: {fileID: 400274225}
+  pattyPrefab: {fileID: 7729375972051325165, guid: 0d7f8e1d290884d47bc9aeaa7e2b613a, type: 3}
+  typeOfInteraction: 5
+  conditions: 03000000
+  display: Grill
   locationOfInterest: {x: 0, y: 0, z: 0}
   objectOfInterest: {fileID: 0}
-  itemOfInterest: patties
-  qtyOfItem: 1
+  itemOfInterest: 
+  qtyOfItem: 0
 --- !u!65 &660768162
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -864,7 +868,7 @@ GameObject:
   - component: {fileID: 1196495183}
   - component: {fileID: 1196495182}
   m_Layer: 0
-  m_Name: meat_supply
+  m_Name: meatCooler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -897,7 +901,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff552f4c206f26b47b98835f7cea0cac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  playerInventoryReference: {fileID: 400274225}
+  pattyPrefab: {fileID: 0}
+  typeOfInteraction: 0
+  conditions: 
   display: Patty
   locationOfInterest: {x: 0, y: 0, z: 0}
   objectOfInterest: {fileID: 0}

@@ -16,13 +16,14 @@ public class Inventory : MonoBehaviour
     public int slotWidth;
     public int slotHeight;
     public int slotPadding;
+    public int slotSelected;
 
     private Hashtable itemMap;                // stores stats of each item
     private List<Item> array;                 // stores the actual items 
     private GameObject[] invSlotObjectsArray; // stores all the inventory slot objects
     private GameObject invHighlightObject;    // stores the inventory object that highlights the selected slot
     private int slotsOccupied;
-    private int slotSelected;
+    
 
     #region Inventory Data
 
@@ -218,6 +219,38 @@ public class Inventory : MonoBehaviour
         return 0;
     }
 
+    public int Add(string id, int count, int slot)
+    {
+        if ((slot < 0) || (slot >= slots)){ return -1; }
+
+        //does this item exist in the game?
+        Item itemDefinition = FetchItemReference(id);
+        if (itemDefinition == null) { return -1; }
+
+        if (array[slot] == null)
+        {
+            array[slot] = new Item(itemDefinition.id, count, itemDefinition.maxcount, itemDefinition.sprite, itemDefinition.stackable);
+            return count;
+        }
+
+        return 0;
+    }
+
+
+    public Item GetSelectedItem()
+    {
+        return array[slotSelected];
+    }
+
+    public bool ItemPresent(string id)
+    {
+        if (ItemExists(id) != -1)
+        {
+            return true;
+        }
+        return false;
+    }
+
     /// REMOVE all instances of an item from the inventory
     public Item Remove(string id)
     {
@@ -229,7 +262,6 @@ public class Inventory : MonoBehaviour
 
         return item;
     }
-
 
     /// REMOVE "count" instances of an item from the inventory
     public Item Remove(string id, int count)
@@ -255,6 +287,25 @@ public class Inventory : MonoBehaviour
             return item;
         }
     }
+
+    public Item Remove(string id, int count, int slot)
+    {
+        Item item = array[slot];
+        if (item == null) { return null; }
+        if ((slot >= slots) || (slot < 0)) {return null; }
+
+        if (item.count <= count)
+        {
+            array[slot] = null;
+            return item;
+        }
+        else
+        {
+            item.count -= count;
+            return new Item(item.id,count,item.maxcount,item.sprite, item.stackable);
+        }
+    }
+
 
     /// Go to Next Slot
     public void SelectNextSlot()
