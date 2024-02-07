@@ -43,6 +43,7 @@ public class Grill : MonoBehaviour, Interaction
             if (pattyList[i] == null)
             {
                 pattyList[i] = new Patty(pattyCookTime);
+                this.pattyObjList[i].SetActive(true);
                 pattyCount++;
                 return 0;
             }
@@ -59,6 +60,7 @@ public class Grill : MonoBehaviour, Interaction
             {
                 pattyList[i] = null;
                 pattyCount--;
+                this.pattyObjList[i].SetActive(false);
                 return true;
             }
 
@@ -149,6 +151,14 @@ public class Grill : MonoBehaviour, Interaction
         this.pattyCount   = 0;
         this.pattyList    = new Patty[this.pattyCapacity];
         this.pattyObjList = new GameObject[this.pattyCapacity];
+        float offsetOrigin = 0.4f;
+        float offsetPatty = 0.3f;
+        for (int i = 0; i < pattyCapacity; i++)
+        {
+            this.pattyObjList[i] = Instantiate(pattyPrefab, transform.position, Quaternion.identity, transform);
+            this.pattyObjList[i].transform.Translate(new Vector3(i * offsetPatty - offsetOrigin, 0.20f, 0f));
+            this.pattyObjList[i].SetActive(false);
+        }
     }
 
     void Update()
