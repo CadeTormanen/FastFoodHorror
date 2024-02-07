@@ -413,7 +413,7 @@ GameObject:
   - component: {fileID: 660768164}
   - component: {fileID: 660768163}
   - component: {fileID: 660768162}
-  - component: {fileID: 660768161}
+  - component: {fileID: 660768165}
   m_Layer: 0
   m_Name: grill
   m_TagString: Untagged
@@ -436,27 +436,6 @@ Transform:
   m_Father: {fileID: 1567803760}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &660768161
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 660768159}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff552f4c206f26b47b98835f7cea0cac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerInventoryReference: {fileID: 400274225}
-  pattyPrefab: {fileID: 7729375972051325165, guid: 0d7f8e1d290884d47bc9aeaa7e2b613a, type: 3}
-  typeOfInteraction: 5
-  conditions: 03000000
-  display: Grill
-  locationOfInterest: {x: 0, y: 0, z: 0}
-  objectOfInterest: {fileID: 0}
-  itemOfInterest: 
-  qtyOfItem: 0
 --- !u!65 &660768162
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -520,6 +499,22 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 660768159}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &660768165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 660768159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8055f218c1343345a60b3c5ada70d7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pattyCapacity: 4
+  pattyCookTime: 5
+  pattyPrefab: {fileID: 7729375972051325165, guid: 0d7f8e1d290884d47bc9aeaa7e2b613a, type: 3}
+  playerInventory: {fileID: 400274225}
 --- !u!1 &763141679
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,8 +860,7 @@ GameObject:
   - component: {fileID: 1196495186}
   - component: {fileID: 1196495185}
   - component: {fileID: 1196495184}
-  - component: {fileID: 1196495183}
-  - component: {fileID: 1196495182}
+  - component: {fileID: 1196495187}
   m_Layer: 0
   m_Name: meatCooler
   m_TagString: Untagged
@@ -889,39 +883,6 @@ Transform:
   m_Father: {fileID: 1567803760}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1196495182
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1196495180}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff552f4c206f26b47b98835f7cea0cac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerInventoryReference: {fileID: 400274225}
-  pattyPrefab: {fileID: 0}
-  typeOfInteraction: 0
-  conditions: 
-  display: Patty
-  locationOfInterest: {x: 0, y: 0, z: 0}
-  objectOfInterest: {fileID: 0}
-  itemOfInterest: patties
-  qtyOfItem: 1
---- !u!114 &1196495183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1196495180}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b07e8eeb7a869d04baa4573f2e30b839, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &1196495184
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -985,6 +946,21 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1196495180}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1196495187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196495180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a71caafa5ef0d3148a515c654cc30970, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInventory: {fileID: 400274225}
+  itemString: patties
+  numberOfItemsToGive: 1
 --- !u!1 &1346480960
 GameObject:
   m_ObjectHideFlags: 0

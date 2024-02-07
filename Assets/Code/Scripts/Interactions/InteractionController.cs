@@ -28,7 +28,7 @@ public class InteractionController : MonoBehaviour
             {
                 //add nearby interaction to the queue if it is valid in the current context
                 Interaction interaction = child.GetComponent<Interaction>();
-                if (interaction.Valid() == true)
+                if (interaction.Possible() == true)
                 {
                     interactionQueue.Enqueue(interaction);
                 }
@@ -58,9 +58,9 @@ public class InteractionController : MonoBehaviour
         for (int i = 0;  i < interactions; i++)
         {
             if (i == interactionSelected){
-                displayText += ("[ " + actionArray[i].display + " ]\n");
+                displayText += ("[ " + actionArray[i].interactionText + " ]\n");
             }else{
-                displayText += (actionArray[i].display + "\n");
+                displayText += (actionArray[i].interactionText + "\n");
             }
         }
 
