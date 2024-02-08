@@ -105,9 +105,9 @@ public class Grill : MonoBehaviour, Interaction
     public void ExecuteInteraction()
     {
         //Place a patty on the grill
-        if (this.HasCapacity() && (this.playerInventory.GetSelectedItem() != null) && (this.playerInventory.GetSelectedItem().id == "patties"))
+        if (this.HasCapacity() && (this.playerInventory.GetSelectedItem() != null) && (this.playerInventory.GetSelectedItem().id == "patty_raw"))
         {
-            this.playerInventory.Remove("patties", 1, this.playerInventory.slotSelected);
+            this.playerInventory.Remove("patty_raw", 1, this.playerInventory.slotSelected);
             this.AddPatty();
             return;
         }
@@ -115,7 +115,7 @@ public class Grill : MonoBehaviour, Interaction
         //Take a patty from the grill
         if ((this.HasDonePatties() == true) && (this.playerInventory.GetSelectedItem() == null))
         {
-            this.playerInventory.Add("patties", 1, this.playerInventory.slotSelected);
+            this.playerInventory.Add("patty_cooked", 1, this.playerInventory.slotSelected);
             this.RemovePatty();
             return;
         }
@@ -124,7 +124,7 @@ public class Grill : MonoBehaviour, Interaction
     public bool Possible()
     {
         //condition 1: The player has a patty and there is a free spot on the grill.
-        if ((this.playerInventory.GetSelectedItem() != null) && (this.playerInventory.GetSelectedItem().id == "patties") && this.HasCapacity())
+        if ((this.playerInventory.GetSelectedItem() != null) && (this.playerInventory.GetSelectedItem().id == "patty_raw") && this.HasCapacity())
         {
             interactionText = "Place Raw Patty";
             return true;

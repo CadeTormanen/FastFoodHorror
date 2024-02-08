@@ -10,7 +10,10 @@ public class Inventory : MonoBehaviour
     [SerializeField] private GameObject HUDCanvas;
     [SerializeField] private Texture2D inventoryBucketEmptyTexture;
     [SerializeField] private Texture2D inventoryBucketKeyTexture;
-    [SerializeField] private Texture2D inventoryBucketPattyTexture;
+    [SerializeField] private Texture2D inventoryBucketPattyRawTexture;
+    [SerializeField] private Texture2D inventoryBucketPattyCookedTexture;
+    [SerializeField] private Texture2D inventoryBucketCupEmptyTexture;
+    [SerializeField] private Texture2D inventoryBucketCupFullTexture;
     [SerializeField] private Texture2D inventoryBucketHighlightSelectionTexture;
 
     public int slotWidth;
@@ -41,8 +44,9 @@ public class Inventory : MonoBehaviour
         public int maxcount;
         public bool stackable;
         public Sprite sprite;
+        public bool keyItem;
 
-        public Item(string id, int count, int maxcount, Sprite sprite, bool stackable = true)
+        public Item(string id, int count, int maxcount, Sprite sprite, bool stackable = true, bool keyItem = false)
         {
             if (!stackable && count > 1)
             {
@@ -55,6 +59,7 @@ public class Inventory : MonoBehaviour
             this.count = count;
             this.stackable = stackable;
             this.maxcount = maxcount;
+            this.keyItem = keyItem;
         }
     }
 
@@ -63,13 +68,19 @@ public class Inventory : MonoBehaviour
     {
         Hashtable map = new Hashtable();
 
-        Sprite pattySprite = Sprite.Create(inventoryBucketPattyTexture, new Rect(0, 0, inventoryBucketPattyTexture.width, inventoryBucketPattyTexture.height), Vector2.zero);
+        Sprite pattyRawSprite    = Sprite.Create(inventoryBucketPattyRawTexture, new Rect(0, 0, inventoryBucketPattyRawTexture.width, inventoryBucketPattyRawTexture.height), Vector2.zero);
+        Sprite pattyCookedSprite = Sprite.Create(inventoryBucketPattyCookedTexture, new Rect(0, 0, inventoryBucketPattyCookedTexture.width, inventoryBucketPattyCookedTexture.height), Vector2.zero);
+        Sprite cupEmptySprite    = Sprite.Create(inventoryBucketCupEmptyTexture, new Rect(0, 0, inventoryBucketCupEmptyTexture.width, inventoryBucketCupEmptyTexture.height), Vector2.zero);
+        Sprite cupFullSprite = Sprite.Create(inventoryBucketCupFullTexture, new Rect(0, 0, inventoryBucketCupFullTexture.width, inventoryBucketCupFullTexture.height), Vector2.zero);
         Sprite keySprite = Sprite.Create(inventoryBucketKeyTexture, new Rect(0, 0, inventoryBucketKeyTexture.width, inventoryBucketKeyTexture.height), Vector2.zero);
         Sprite emptySprite = Sprite.Create(inventoryBucketEmptyTexture, new Rect(0, 0, inventoryBucketEmptyTexture.width, inventoryBucketEmptyTexture.height), Vector2.zero);
 
-        map.Add("patties", new Item("patties", 1, 12, pattySprite, false));
-        map.Add("key", new Item("key", 1, 1, keySprite, false));
-        map.Add("empty", new Item("empty", 1, 1, emptySprite, false));
+        map.Add("patty_raw", new Item("patty_raw", 1, 12, pattyRawSprite, false,false));
+        map.Add("patty_cooked", new Item("patty_cooked", 1, 12, pattyCookedSprite, false, false));
+        map.Add("cup_empty", new Item("cup_empty", 1, 12, cupEmptySprite, false, false));
+        map.Add("cup_full", new Item("cup_full", 1, 12, cupFullSprite, false, false));
+        map.Add("key", new Item("key", 1, 1, keySprite, false,true));
+        map.Add("empty", new Item("empty", 1, 1, emptySprite, false, false));
 
         return map;
     }
@@ -320,6 +331,14 @@ public class Inventory : MonoBehaviour
     {
         if (slotSelected == 0) { slotSelected = slots - 1; }
         else { slotSelected--; }
+    }
+
+
+    public bool IsKeyItem(string id)
+    {
+        Item item = this.FetchItemReference(id);
+        if (item == null) { return false; }
+        return item.keyItem; 
     }
 
     #endregion

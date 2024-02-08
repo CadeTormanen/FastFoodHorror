@@ -12,9 +12,7 @@ public class Beverages : MonoBehaviour, Interaction
     private float timeToFill;
     private int beverageCapacity;
     private int beverageCount;
-    
     public string interactionText { get; set; }
-
 
     private class beverage
     {
@@ -48,6 +46,7 @@ public class Beverages : MonoBehaviour, Interaction
     {
         for (int i = 0; i < beverageCapacity; i++)
         {
+            if (beverages[i] == null){ continue; }
             if (beverages[i].Full() == true)
             {
                 return true;
@@ -67,24 +66,28 @@ public class Beverages : MonoBehaviour, Interaction
 
     private void RemoveBeverage()
     {
-        for (int i = 0; i <= beverageCapacity; i++)
+        for (int i = 0; i < beverageCapacity; i++)
         {
-            if (beverages[i] != null)
+            if (beverages[i] == null) { continue; }
+            if (beverages[i].Full() == true)
             {
                 beverages[i] = null;
+                beverageCount--;
+                break;
             }
         }
     }
 
     private void AddBeverage()
     {
-        for (int i = 0; i <= beverageCapacity; i++)
+        for (int i = 0; i < beverageCapacity; i++)
         {
-            if (beverages[i] != null)
-            {
-
+            if (beverages[i] == null) {
+                beverages[i] = new beverage(timeToFill);
                 beverageCount++;
+                break;
             }
+
         }
     }
     
@@ -95,14 +98,14 @@ public class Beverages : MonoBehaviour, Interaction
         if ((HasFullBeverages() == true) && (playerInventory.GetSelectedItem() == null))
         {
             RemoveBeverage();
-            playerInventory.Add("full_beverage", 1, playerInventory.slotSelected);
+            playerInventory.Add("cup_full", 1, playerInventory.slotSelected);
         }
 
         //option 2: player is holding an empty beverage, there is space on the beverage machine: fil the beverage
-        if ((HasCapacity()) && (playerInventory.GetSelectedItem() != null) && (playerInventory.GetSelectedItem().id == "empty_beverage"))
+        if ((HasCapacity()) && (playerInventory.GetSelectedItem() != null) && (playerInventory.GetSelectedItem().id == "cup_empty"))
         {
             AddBeverage();
-            playerInventory.Remove("empty_beverage", 1, playerInventory.slotSelected);
+            playerInventory.Remove("cup_empty", 1, playerInventory.slotSelected);
         }
 
     }
@@ -120,7 +123,7 @@ public class Beverages : MonoBehaviour, Interaction
             return true;
         }
 
-        if ((playerInventory.GetSelectedItem() != null) && (playerInventory.GetSelectedItem().id == "empty_beverage"))
+        if ((HasCapacity()) && (playerInventory.GetSelectedItem() != null) && (playerInventory.GetSelectedItem().id == "cup_empty"))
         {
             interactionText = "Fill Beverage";
             return true;
@@ -131,11 +134,8 @@ public class Beverages : MonoBehaviour, Interaction
 
     void Start()
     {
+        beverageCapacity = 2;
         beverages = new beverage[beverageCapacity];
-        for (int i = 0; i < beverageCapacity; i++)
-        {
-            beverages[i] = new beverage(this.timeToFill);
-        }
 
     }
 
@@ -143,7 +143,11 @@ public class Beverages : MonoBehaviour, Interaction
     {
         for (int i = 0; i < beverageCapacity; i++)
         {
-            beverages[i].Fill();
+            if (beverages[i] != null)
+            {
+                beverages[i].Fill();
+            }
+            
         }
     }
 }
