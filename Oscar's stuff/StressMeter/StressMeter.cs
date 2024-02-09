@@ -11,7 +11,7 @@ public class PlayerStress: MonoBehaviour{
 
 void Update{
     // add things here for increase and decrease
-    // that way it stays constant to what the stress should be
+    // that way it stays constant to what the stress should be and add other things
 }
 
 public void OnTaskFail(float stressAmount){
