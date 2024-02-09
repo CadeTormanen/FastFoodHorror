@@ -3,13 +3,27 @@ using UnityEngine;
 public class DoorFunc : DoorBehav
 
 private bool isOpen = false;
+private bool isPlayerClose = false;
 
 void start(){
-    // this is where I would put the animation stuff
+    base.Start();
 }
 
 void update(){
-    if(Input.GetKeyDown(KeyCode.E)){
+    if(isPlayerClose && Input.GetKeyDown(KeyCode.E)){
         isOpen = !isOpen;
     }
 }
+
+private void OnTriggerExit(Collider other){
+        if (other.CompareTag("Player"))
+        {
+            isPlayerNearby = false;
+        }
+    }
+
+    
+    protected void AnimateDoor(bool open){
+        // Implementation of door animation
+       
+    }
