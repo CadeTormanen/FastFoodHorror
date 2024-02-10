@@ -12,7 +12,6 @@ public class InteractionController : MonoBehaviour
     private Queue<Interaction> interactionQueue;
 
     private int interactionSelected;
-    private int interactionNumber;
 
     private GameObject textObject;
     private Text textComponent;
@@ -27,11 +26,15 @@ public class InteractionController : MonoBehaviour
             
             if (Vector3.Distance(child.position, playerCharacterObject.transform.position) <= interactionDistance)
             {
+                //add nearby interaction to the queue if it is valid in the current context
                 Interaction interaction = child.GetComponent<Interaction>();
-                interactionQueue.Enqueue(interaction);
+                if (interaction.Possible() == true)
+                {
+                    interactionQueue.Enqueue(interaction);
+                }
+                
             }
         }
-        interactionNumber = interactionQueue.Count;
     }
 
     /// <summary>
@@ -39,35 +42,25 @@ public class InteractionController : MonoBehaviour
     /// </summary>
     private void StageInteractions()
     {
-        string displayText = "";
         int interactions = interactionQueue.Count;
-        Interaction[] actionArray = new Interaction[interactions];
-
+        if (interactions == 0) { return; }
         if (interactionSelected >= interactions) { interactionSelected = 0; }
 
-        //check player input: for changing interaction selection
-        if (playerControllerObject.GetComponent<PlayerInteractions>().scrollUp){
-            if (interactionSelected != 0) { interactionSelected++; }
-        }
-
-        if (playerControllerObject.GetComponent<PlayerInteractions>().scrollDown){
-            if (interactionSelected != interactions-1){ interactionSelected++; }
-        }
-        
         //take all interactions from queue and put into array
+        Interaction[] actionArray = new Interaction[interactions];
         for (int i = 0; i < interactions; i++)
         {
-            Interaction interaction = interactionQueue.Dequeue();
-            actionArray[i] = interaction;
+            actionArray[i] = interactionQueue.Dequeue();
         }
 
         //go through all interactions in the array and display on screen
+        string displayText = "";
         for (int i = 0;  i < interactions; i++)
         {
             if (i == interactionSelected){
-                displayText += ("[ " + actionArray[i].display + " ]\n");
+                displayText += ("[ " + actionArray[i].interactionText + " ]\n");
             }else{
-                displayText += (actionArray[i].display + "\n");
+                displayText += (actionArray[i].interactionText + "\n");
             }
         }
 
@@ -100,6 +93,7 @@ public class InteractionController : MonoBehaviour
 
     public void Update()
     {
+        textComponent.text = "";
         FetchNearbyInteractions();
         StageInteractions();
     }
@@ -107,6 +101,7 @@ public class InteractionController : MonoBehaviour
 
     public void Start()
     {
+        
         setupTextbox();
 
 
