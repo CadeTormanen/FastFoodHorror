@@ -8,7 +8,7 @@ public class PlayerStress: MonoBehaviour{
     public Slider stressMeter;
     public float maxStress = 100f;
     private float currentStress = 0f;
-
+       
 void Update{
     // add things here for increase and decrease
     // that way it stays constant to what the stress should be and add other things
