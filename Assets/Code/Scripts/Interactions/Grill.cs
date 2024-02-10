@@ -28,8 +28,8 @@ public class Grill : MonoBehaviour, Interaction
         public Patty(float timeRequired)
         {
             this.timeRequired = timeRequired;
-            this.timeElapsed = 0;
-            this.done = false;
+            this.timeElapsed  = 0;
+            this.done         = false;
         }
         public void Cook() { timeElapsed += Time.deltaTime; }
         public bool Done() { return (timeElapsed >= timeRequired); }

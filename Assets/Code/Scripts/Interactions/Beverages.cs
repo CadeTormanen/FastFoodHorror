@@ -10,8 +10,13 @@ public class Beverages : MonoBehaviour, Interaction
     private Inventory playerInventory;
     [SerializeField]
     private float timeToFill;
+    [SerializeField]
+    private GameObject beveragePrefab;
+
+
     private int beverageCapacity;
     private int beverageCount;
+    private GameObject[] beverageObjList;
     public string interactionText { get; set; }
 
     private class beverage
@@ -71,6 +76,7 @@ public class Beverages : MonoBehaviour, Interaction
             if (beverages[i] == null) { continue; }
             if (beverages[i].Full() == true)
             {
+                this.beverageObjList[i].SetActive(false);
                 beverages[i] = null;
                 beverageCount--;
                 break;
@@ -83,6 +89,7 @@ public class Beverages : MonoBehaviour, Interaction
         for (int i = 0; i < beverageCapacity; i++)
         {
             if (beverages[i] == null) {
+                this.beverageObjList[i].SetActive(true);
                 beverages[i] = new beverage(timeToFill);
                 beverageCount++;
                 break;
@@ -90,7 +97,6 @@ public class Beverages : MonoBehaviour, Interaction
 
         }
     }
-    
     
     public void ExecuteInteraction()
     {
@@ -136,6 +142,17 @@ public class Beverages : MonoBehaviour, Interaction
     {
         beverageCapacity = 2;
         beverages = new beverage[beverageCapacity];
+        this.beverageObjList = new GameObject[this.beverageCapacity];
+        float offsetOrigin = 0.25f;
+        float offsetBeverage = 0.4f;
+        for (int i = 0; i < this.beverageCapacity; i++)
+        {
+            this.beverageObjList[i] = Instantiate(beveragePrefab, transform.position, Quaternion.identity, transform);
+            this.beverageObjList[i].transform.Translate(new Vector3(i * offsetBeverage - offsetOrigin, 0f, -0.30f));
+            this.beverageObjList[i].SetActive(false);
+        }
+
+
 
     }
 
