@@ -15,9 +15,7 @@ public class PlayerMain : MonoBehaviour
 
     private void Inputs()
     {
-        if (Input.GetKeyDown(KeyCode.H)) {
-            inventoryObject.Add("patties", 12);
-        }
+
 
     }
 
@@ -29,11 +27,6 @@ public class PlayerMain : MonoBehaviour
     void Start()
     {
         FetchInventory();
-        
-        
-       
-
-        
     }
 
 }

@@ -11,5 +11,6 @@ public class MoveNode : MonoBehaviour
     void Start()
     {
         this.position = transform.position;
+        this.GetComponent<MeshRenderer>().enabled = false;
     }
 }

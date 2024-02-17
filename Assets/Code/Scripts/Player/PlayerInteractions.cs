@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -7,11 +8,17 @@ public class PlayerInteractions : MonoBehaviour
 {
     [SerializeReference]
     private Inventory inventory;
-
     public KeyCode interactionKey;
-    public bool scrollUpEnabled;
-    public bool scrollDownEnabled;
-    public bool interactionEnabled;
+    public bool scrollUpEnabled { get; private set; }
+    public bool scrollDownEnabled { get; private set; }
+    public bool interactionEnabled { get; private set; }
+    public bool flashEnabled { get; private set; }
+    public bool flashingMonster { get; private set; }
+
+    public GameObject monsterObject;
+
+    [SerializeReference]
+    private GameObject flashlight;
 
     #region get input
 
@@ -30,6 +37,23 @@ public class PlayerInteractions : MonoBehaviour
         return 0;
     }
 
+    private bool FacingMonster()
+    {
+        //Calculate Flashlight Direction Unit Vector
+        double flashlightAngle = flashlight.transform.eulerAngles.y * Math.PI / 180;
+        double xComponent = Math.Sin(flashlightAngle);
+        double zComponent = Math.Cos(flashlightAngle);
+        Vector2 flashlightUnitVec2D = new Vector2((float)xComponent, (float)zComponent);
+
+        //Calculate Player-to-Monster Unit Vector
+        Vector3 monsterLoc = monsterObject.transform.position - flashlight.transform.position;
+        monsterLoc.Normalize();
+        Vector2 monsterUnitVec2D = new Vector2(monsterLoc.x, monsterLoc.z);
+
+        //Dot product the two vectors to see if the player is facing the monster
+        return Vector3.Dot(flashlightUnitVec2D, monsterUnitVec2D) > 0.97;
+    }
+
     private void GetInputs()
     {
         interactionEnabled = Input.GetKeyDown(interactionKey);
@@ -40,6 +64,10 @@ public class PlayerInteractions : MonoBehaviour
 
        if (scrollResult < 0){scrollDownEnabled = true; }
         else { scrollDownEnabled = false; }
+
+       if (Input.GetMouseButton((int) MouseButton.Right) == true){ flashEnabled = true; }
+       else { flashEnabled = false; }
+
     }
 
     #endregion
@@ -48,7 +76,10 @@ public class PlayerInteractions : MonoBehaviour
     private void HandleInputs()
     {
         if (scrollDownEnabled){ inventory.SelectPreviousSlot();}
-        if(scrollUpEnabled   ){ inventory.SelectNextSlot();    }
+        if(scrollUpEnabled   ){ inventory.SelectNextSlot();}
+
+        flashingMonster = flashEnabled && FacingMonster(); // are we facing the monster and flashing?
+        flashlight.SetActive(flashEnabled);                // turn on flashlight if enabled
     }
 
     #endregion
