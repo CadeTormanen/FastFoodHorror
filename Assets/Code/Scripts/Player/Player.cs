@@ -4,8 +4,18 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerInteractions : MonoBehaviour
+public class Player : MonoBehaviour
 {
+    public enum PLAYERSTATES
+    {
+        free,
+        dialogue,
+        cutscene,
+        jumpscare
+    }
+
+    public PLAYERSTATES state { get; set; }
+
     [SerializeReference]
     private Inventory inventory;
     public KeyCode interactionKey;
@@ -15,7 +25,9 @@ public class PlayerInteractions : MonoBehaviour
     public bool flashEnabled { get; private set; }
     public bool flashingMonster { get; private set; }
 
-    public GameObject monsterObject;
+
+    [SerializeReference]
+    private GameObject monsterObject;
 
     [SerializeReference]
     private GameObject flashlight;
@@ -84,9 +96,30 @@ public class PlayerInteractions : MonoBehaviour
 
     #endregion
 
+    private void Start()
+    {
+        state = PLAYERSTATES.free;
+    }
+
     void Update()
     {
-        GetInputs();
-        HandleInputs();
+        switch (state)
+        {
+            case (PLAYERSTATES.free):
+                this.GetComponent<FirstPersonMovement>().active = true;
+                GetInputs();
+                HandleInputs();
+                break;
+            case (PLAYERSTATES.dialogue):
+                this.GetComponent<FirstPersonMovement>().active = false;
+                break;
+            case (PLAYERSTATES.cutscene):
+                this.GetComponent<FirstPersonMovement>().active = false;
+                break;
+            case (PLAYERSTATES.jumpscare):
+                this.GetComponent<FirstPersonMovement>().active = false;
+
+                break;
+        }
     }
 }
