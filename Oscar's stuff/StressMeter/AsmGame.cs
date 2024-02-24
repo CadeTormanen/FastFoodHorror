@@ -20,7 +20,22 @@ public class BurgerAsm : monoBehaviour{
         }
         currentBurg = new GameObject("Burger");
     }
-    void AddIngredient(){
-        // add something that allows the user to add things tot the burger
+     public void AddIngredient(string ingredientName){
+    
+        foreach (Ingredient ingredient in ingredients){
+        
+            if (ingredient.ingredientName.Equals(ingredientName, System.StringComparison.OrdinalIgnoreCase))
+            {
+                Vector3 spawnPosition = currentBurger.transform.childCount > 0 ? 
+                    spawnPoint.position + new Vector3(0, 0.05f, 0) : spawnPoint.position;
+
+                Instantiate(ingredient.prefab, spawnPosition, Quaternion.identity, currentBurger.transform);
+
+                if (ingredientName.ToLower().Contains("topbun")){
+                    FinishBurger();
+                }
+                return; 
+            }
+        }
     }
 }
