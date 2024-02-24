@@ -8,7 +8,7 @@ public class InteractionController : MonoBehaviour
 {
     public float interactionDistance;
     public GameObject playerCharacterObject;
-    public GameObject playerControllerObject;
+    public GameObject playerObject;
     private Queue<Interaction> interactionQueue;
 
     private int interactionSelected;
@@ -23,7 +23,6 @@ public class InteractionController : MonoBehaviour
     {
         foreach (Transform child in transform)
         {
-            
             if (Vector3.Distance(child.position, playerCharacterObject.transform.position) <= interactionDistance)
             {
                 //add nearby interaction to the queue if it is valid in the current context
@@ -32,7 +31,6 @@ public class InteractionController : MonoBehaviour
                 {
                     interactionQueue.Enqueue(interaction);
                 }
-                
             }
         }
     }
@@ -65,7 +63,7 @@ public class InteractionController : MonoBehaviour
         }
 
         //check player input: for activating the selected interaction
-        if (playerControllerObject.GetComponent<PlayerInteractions>().interactionEnabled){
+        if (playerObject.GetComponent<Player>().interactionEnabled){
             actionArray[interactionSelected].ExecuteInteraction();
         }
 
@@ -98,12 +96,8 @@ public class InteractionController : MonoBehaviour
         StageInteractions();
     }
 
-
     public void Start()
-    {
-        
+    {  
         setupTextbox();
-
-
     }
 }

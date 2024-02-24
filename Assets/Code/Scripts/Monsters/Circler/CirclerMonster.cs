@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class CirclerMonster : MonoBehaviour
 {
-
-    private enum mood
+    public enum mood
     {
         calm,
         aware,
@@ -12,58 +11,75 @@ public class CirclerMonster : MonoBehaviour
         vicious
     }
 
-    private mood state;
-    [SerializeField]
-    private GameObject playerObject;
-    [SerializeField] [Range(0f, 1.0f)]
-    private float movementOdds;
-    [SerializeField]
-    private MoveNode startNode;
-    [SerializeField]
-    private float timeBetweenOpportunity;
     private MoveNode currentNode;
 
+    [SerializeField]
+    private MoveNode startNode;
+
+    [SerializeField]
+    private GameObject playerObject;
+
+    [SerializeField] [Range(0f, 1.0f)]
+    private float movementOdds;
+
+    [SerializeField]
+    private float timeBetweenOpportunity;
+
+    public mood state;
     private float timeElapsedSinceMove;
-    private int circuits;
     private float timeBetweenFlashes;
     private float timeSinceLastFlash;
+
 
     //Check if the player flashed their light in our direction, react accordingly
     private void CheckIfPlayerFlashing()
     {
-        if (playerObject.GetComponent<PlayerInteractions>().flashingMonster == true)
+        if (playerObject.GetComponent<Player>().flashingMonster == true)
         {
+            timeSinceLastFlash = 0f;
             switch (state)
             {
                 case (mood.calm):
-                    Escalate();
                     break;
                 case (mood.aware):
-                    Deescalate();
                     break;
                 case (mood.agitated):
-                    Deescalate();
                     break;
                 case (mood.angry):
-                    Deescalate();
+                    Advance();
                     break;
                 case (mood.vicious):
-                    JumpscarePlayer();
+                    Jumpscare();
                     break;
             }
         }
     }
 
-    private void JumpscarePlayer()
+    private void Jumpscare()
     {
+        playerObject.GetComponent<Player>().state = Player.PLAYERSTATES.jumpscare;
 
     }
 
     private void NextNode()
     {
         currentNode = currentNode.next;
-        if (this.currentNode == this.startNode) { this.circuits++; }
     }
+    private void Advance()
+    {
+        if (state == mood.vicious) { return; }
+        state = (mood)(((int)state) + 1);
+        currentNode = currentNode.advanceNode;
+    }
+
+    private void Retreat()
+    {
+        if (state == mood.calm) { return; }
+        state = (mood)(((int)state) - 1);
+        currentNode = currentNode.retreatNode;
+    }
+
+
 
     private bool RollOdds(float outOf)
     {
@@ -103,45 +119,38 @@ public class CirclerMonster : MonoBehaviour
             case mood.angry:
                 if (RollOdds(movementOdds) == true)
                 {
-                    JumpscarePlayer();
+                    NextNode();
                 }
                 break;
             case mood.vicious:
                 if (RollOdds(movementOdds) == true)
                 {
-                    JumpscarePlayer();
+                    NextNode();
                 }
                 break;
         }
     }
 
-    private void Escalate()
-    {
-        if (state == mood.vicious) { return; }
-        state = (mood) ( ((int) state) + 1);
-    }
 
-    private void Deescalate()
-    {
-        if (state == mood.calm) { return; }
-        state = (mood)(((int)state) - 1);
-    }
 
     public void Start()
     {
         this.currentNode           = startNode;
-        this.circuits              = 0;
         this.timeSinceLastFlash    = 0;
         this.timeBetweenFlashes    = 5;
     }
 
+    private void MapPaths()
+    {
+
+
+    }
+
     public void Update()
     {
-        Debug.Log(state);
 
         if ((timeSinceLastFlash += Time.deltaTime) >= timeBetweenFlashes)
         {
-            timeSinceLastFlash = 0f;
             CheckIfPlayerFlashing();
         }
 
