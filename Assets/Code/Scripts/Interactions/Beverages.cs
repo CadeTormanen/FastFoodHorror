@@ -148,7 +148,7 @@ public class Beverages : MonoBehaviour, Interaction
         for (int i = 0; i < this.beverageCapacity; i++)
         {
             this.beverageObjList[i] = Instantiate(beveragePrefab, transform.position, Quaternion.identity, transform);
-            this.beverageObjList[i].transform.Translate(new Vector3(i * offsetBeverage - offsetOrigin, 0f, -0.30f));
+            this.beverageObjList[i].transform.Translate(new Vector3(i * offsetBeverage - offsetOrigin, 0f, 0.30f));
             this.beverageObjList[i].SetActive(false);
         }
 

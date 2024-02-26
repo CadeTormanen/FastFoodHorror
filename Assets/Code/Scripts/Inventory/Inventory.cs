@@ -16,10 +16,10 @@ public class Inventory : MonoBehaviour
     public int slotPadding;
     public int slotSelected;
 
-    private Hashtable itemMap;                // stores stats of each item
-    private List<ItemData.Item> array;                 // stores the actual items 
-    private GameObject[] invSlotObjectsArray; // stores all the inventory slot objects
-    private GameObject invHighlightObject;    // stores the inventory object that highlights the selected slot
+    private Hashtable itemMap;                      // stores stats of each item
+    private List<ItemData.Item> array;              // stores the actual items 
+    private GameObject[] invSlotObjectsArray;       // stores all the inventory slot objects
+    private GameObject invHighlightObject;          // stores the inventory object that highlights the selected slot
     private int slotsOccupied;
    
     #region UI
@@ -185,6 +185,13 @@ public class Inventory : MonoBehaviour
         return item;
     }
 
+    public ItemData.Item Remove(string id)
+    {
+        int location = FindItem(id);
+        if (location == -1) { return null; }
+        return array[location];
+    }
+
     public void DropItem(int slot, Vector3 whereAt)
     {
         if (slot == -1) { slot = slotSelected; }
@@ -194,6 +201,21 @@ public class Inventory : MonoBehaviour
         ItemDrop itemDrop           = dropObject.AddComponent<ItemDrop>();
         itemDrop.Bind(item);
         array[slot] = null;
+    }
+
+    private int FindItem(string id)
+    {
+        for (int i = 0; i < slots; i++)
+        {
+            if (array[i] != null)
+            {
+                if (array[i].id == id)
+                {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
     /// Go to Next Slot

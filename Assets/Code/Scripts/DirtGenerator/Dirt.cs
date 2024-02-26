@@ -9,12 +9,15 @@ public class Dirt : MonoBehaviour
     private float sweepTimeoutLength;
     private float timeSinceLastSweep;
 
-    public void GetSwept() {
+    public int GetSwept() {
         if (sweepTimeout == false){
-            Debug.Log("getting swept for real!");
-            this.hp -= 50;
-            timeSinceLastSweep = 0f;
-        } 
+
+            //this.hp -= 50;
+            Destroy(gameObject);
+            return 1;
+        }
+        timeSinceLastSweep = 0f;
+        return 0;
     }
     public bool Alive()    { return (hp > 0); }
 
@@ -24,7 +27,6 @@ public class Dirt : MonoBehaviour
         sweepTimeout = false;
         timeSinceLastSweep = 0f;
         sweepTimeoutLength = 2f;
-
     }
 
     public void Update()

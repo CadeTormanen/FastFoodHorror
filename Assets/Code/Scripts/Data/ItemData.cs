@@ -13,11 +13,13 @@ public class ItemData : MonoBehaviour
     [SerializeField] private Texture2D inventoryBucketPattyCookedTexture;
     [SerializeField] private Texture2D inventoryBucketCupEmptyTexture;
     [SerializeField] private Texture2D inventoryBucketCupFullTexture;
+   // [SerializeField] private Texture2D inventoryBucketBroomTexture;
 
     [SerializeField] private GameObject modelPattyCooked;
     [SerializeField] private GameObject modelPattyRaw;
     [SerializeField] private GameObject modelCupEmpty;
     [SerializeField] private GameObject modelCupFull;
+    //[SerializeField] private GameObject modelBroom;
 
     public class Item
     {
@@ -57,6 +59,7 @@ public class ItemData : MonoBehaviour
         Sprite cupFullSprite        = Sprite.Create(inventoryBucketCupFullTexture, new Rect(0, 0, inventoryBucketCupFullTexture.width, inventoryBucketCupFullTexture.height), Vector2.zero);
         Sprite keySprite            = Sprite.Create(inventoryBucketKeyTexture, new Rect(0, 0, inventoryBucketKeyTexture.width, inventoryBucketKeyTexture.height), Vector2.zero);
         Sprite emptySprite          = Sprite.Create(inventoryBucketEmptyTexture, new Rect(0, 0, inventoryBucketEmptyTexture.width, inventoryBucketEmptyTexture.height), Vector2.zero);
+       // Sprite broomSprite          = Sprite.Create(inventoryBucketBroomTexture, new Rect(0, 0, inventoryBucketBroomTexture.width, inventoryBucketBroomTexture.height), Vector2.zero);
 
         map.Add("patty_raw",    new Item("patty_raw", 1, 12,    pattyRawSprite, false, false,modelPattyRaw));
         map.Add("patty_cooked", new Item("patty_cooked", 1, 12, pattyCookedSprite, false, false, modelPattyCooked));
@@ -64,6 +67,7 @@ public class ItemData : MonoBehaviour
         map.Add("cup_full",     new Item("cup_full", 1, 12,     cupFullSprite, false, false, modelCupFull));
         map.Add("key",          new Item("key", 1, 1,           keySprite, false, true));
         map.Add("empty",        new Item("empty", 1, 1,         emptySprite, false, false));
+        //map.Add("broom"),       new Item("broom", 1, 1, broomSprite, false, false, modelBroom));      
 
         return map;
     }
@@ -98,9 +102,3 @@ public class ItemData : MonoBehaviour
     }
 
 }
-
-
-
-
-
-

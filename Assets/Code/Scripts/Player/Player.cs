@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
         sweeping
     }
 
-    public SWEEPSTATES sweepState;
+    public SWEEPSTATES sweepState { get; private set; }
 
     
     [SerializeField] private InteractionController interactionController;
@@ -35,8 +35,11 @@ public class Player : MonoBehaviour
     public bool dropEnabled         { get; private set; }
     public bool sweepEnabled        { get; private set; }
 
+    private bool broomEnabled;
+
     public KeyCode interactionKey;
     public KeyCode dropKey;
+    public KeyCode broomKey;
     private int numberKeyDown;
 
     [SerializeReference]
@@ -46,7 +49,7 @@ public class Player : MonoBehaviour
     private GameObject flashlight;
 
     [SerializeReference]
-    private GameObject broomObject;
+    public GameObject broomObject;
 
     #region get input
 
@@ -133,6 +136,14 @@ public class Player : MonoBehaviour
        else { flashEnabled = false; }
 
         sweepEnabled = Input.GetMouseButton((int)MouseButton.Left);
+        
+        if (broomEnabled == false) {
+            if (Input.GetKeyDown(broomKey)) { broomEnabled = true; }
+        }
+        else
+        {
+            if (Input.GetKeyDown(broomKey)) { broomEnabled = false; }
+        }
 
         numberKeyDown = -1;
         if (Input.GetKeyDown(KeyCode.Alpha1)) { numberKeyDown = 1; }
@@ -177,6 +188,7 @@ public class Player : MonoBehaviour
     {
         state       = PLAYERSTATES.free;
         sweepState  = SWEEPSTATES.idle;
+        broomEnabled = false;
     }
 
     private void Update(){
@@ -186,6 +198,7 @@ public class Player : MonoBehaviour
         {
             case (PLAYERSTATES.free):
                 this.GetComponent<FirstPersonMovement>().active = true;
+                this.broomObject.SetActive(broomEnabled);
                 HandleInputs();
                 break;
             case (PLAYERSTATES.dialogue):

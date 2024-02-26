@@ -51,18 +51,12 @@ public class DirtGenerator : MonoBehaviour
         {
             if (dirtPiles[i] != null)
             {
+
                 //check if dirt is being swept
-                if ((Vector3.Distance(dirtPiles[i].transform.position, playerObject.transform.position) <= sweepingRange) && playerObject.GetComponent<Player>().sweepState == Player.SWEEPSTATES.sweeping)
+                if ((Vector3.Distance(dirtPiles[i].transform.position, playerObject.GetComponent<Player>().broomObject.transform.position) <= sweepingRange) && playerObject.GetComponent<Player>().sweepState == Player.SWEEPSTATES.sweeping)
                 {
-                    dirtPiles[i].GetComponent<Dirt>().GetSwept();
-                }
-
-
-                //check if dirt is completely swept
-                if (dirtPiles[i].GetComponent<Dirt>().Alive() == false)
-                {
-                    dirtPiles[i] = null;
-                    numPiles--;
+                    int result = dirtPiles[i].GetComponent<Dirt>().GetSwept();
+                    if (result == 1) { dirtPiles[i] = null; }
                 }
             }
         }
@@ -70,7 +64,7 @@ public class DirtGenerator : MonoBehaviour
 
     public void Update()
     {
-        
+        CheckDirt();
         timeSinceLastGeneration += Time.deltaTime;
         if (timeSinceLastGeneration >= timeBetweenThisGeneration)
         {
@@ -78,7 +72,7 @@ public class DirtGenerator : MonoBehaviour
             timeSinceLastGeneration = 0f;
             timeBetweenThisGeneration = Random.Range(minTimeBetweenGenerations, maxTimeBetweenGenerations);
         }
-        CheckDirt();
+        
     }
 
     public void Start()
