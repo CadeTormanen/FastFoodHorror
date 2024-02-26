@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,12 +10,17 @@ public class InteractionController : MonoBehaviour
     public float interactionDistance;
     public GameObject playerCharacterObject;
     public GameObject playerObject;
+    [SerializeField] private GameObject interactionBox;
+    [SerializeField] private GameObject interactionText;
+    private TextMeshProUGUI textComponent;
     private Queue<Interaction> interactionQueue;
-
     private int interactionSelected;
 
-    private GameObject textObject;
-    private Text textComponent;
+    private int lowerBound;
+    private int upperBound;
+    private int interactions;
+
+    
 
     /// <summary>
     /// Get all interactions within 'interactionDistance' and enqueue them.
@@ -40,9 +46,27 @@ public class InteractionController : MonoBehaviour
     /// </summary>
     private void StageInteractions()
     {
-        int interactions = interactionQueue.Count;
-        if (interactions == 0) { return; }
+        textComponent.text = "";
+        interactionBox.SetActive(false);
+
+        interactions = interactionQueue.Count;
+
+        //reset the range of interactions to display if the number of interactions changed
+        if (interactionQueue.Count == 0) { return; }
+        
+        
+        //set interaction display box to correct height, and activate
+        interactionBox.SetActive(true);
         if (interactionSelected >= interactions) { interactionSelected = 0; }
+        if (interactionSelected < 0)             { interactionSelected = 0; }
+
+        if (interactionSelected == 0) { lowerBound = 0;upperBound = 2; }
+        else{
+            upperBound = interactionSelected + 1;
+            lowerBound = interactionSelected - 1;
+        }
+
+
 
         //take all interactions from queue and put into array
         Interaction[] actionArray = new Interaction[interactions];
@@ -51,14 +75,16 @@ public class InteractionController : MonoBehaviour
             actionArray[i] = interactionQueue.Dequeue();
         }
 
-        //go through all interactions in the array and display on screen
+        //display three of the interactions of the screen at a time
         string displayText = "";
-        for (int i = 0;  i < interactions; i++)
+        
+        for (int i = lowerBound;  i <= upperBound; i++)
         {
+            if ((i < 0) || (i >= interactions)){continue;}
             if (i == interactionSelected){
-                displayText += ("[ " + actionArray[i].interactionText + " ]\n");
+                displayText += ("> " + i.ToString() + " " + actionArray[i].interactionText + "\n");
             }else{
-                displayText += (actionArray[i].interactionText + "\n");
+                displayText += ("  " + i.ToString() + " " + actionArray[i].interactionText + "\n");
             }
         }
 
@@ -71,27 +97,30 @@ public class InteractionController : MonoBehaviour
             
     }
 
+    public void NextInteraction()
+    {
+        if (interactionSelected == interactions-1){return;}
+        interactionSelected++;
+    }
+
+    public void PreviousInteraction()
+    {
+        if (interactionSelected == 0) { return; }
+        interactionSelected--;
+    }
+
     /// <summary>
     /// Setup the text box so it is ready to write to.
     /// </summary>
     private void setupTextbox()
     {
+        interactionBox.SetActive(false);
         interactionQueue = new Queue<Interaction>();
-        textObject = new GameObject("InteractionText");
-        textComponent = textObject.AddComponent<Text>();
-        textObject.transform.SetParent(GameObject.Find("PlayerHUD").transform, false);
-
-        textComponent.text = "";
-        textComponent.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-        textComponent.fontSize = 12;
-
-        RectTransform rectTransform = textObject.GetComponent<RectTransform>();
-        rectTransform.localPosition = new Vector3(0, -250, 0);
+        textComponent = interactionText.GetComponent<TextMeshProUGUI>();
     }
 
     public void Update()
     {
-        textComponent.text = "";
         FetchNearbyInteractions();
         StageInteractions();
     }

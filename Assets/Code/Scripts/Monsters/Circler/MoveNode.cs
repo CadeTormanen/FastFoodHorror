@@ -15,5 +15,6 @@ public class MoveNode : MonoBehaviour
     {
         this.position = transform.position;
         this.GetComponent<MeshRenderer>().enabled = false;
+        this.GetComponent<BoxCollider>().enabled = false;
     }
 }
