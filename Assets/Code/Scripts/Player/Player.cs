@@ -14,23 +14,39 @@ public class Player : MonoBehaviour
         jumpscare
     }
 
-    public PLAYERSTATES state { get; set; }
+    public enum SWEEPSTATES
+    {
+        idle,
+        sweeping
+    }
 
-    [SerializeReference]
-    private Inventory inventory;
+    public SWEEPSTATES sweepState;
+
+    
+    [SerializeField] private InteractionController interactionController;
+    [SerializeReference] private Inventory inventory;
+
+    public PLAYERSTATES state       { get; set; }
+    public bool scrollUpEnabled     { get; private set; }
+    public bool scrollDownEnabled   { get; private set; }
+    public bool interactionEnabled  { get; private set; }
+    public bool flashEnabled        { get; private set; }
+    public bool flashingMonster     { get; private set; }
+    public bool dropEnabled         { get; private set; }
+    public bool sweepEnabled        { get; private set; }
+
     public KeyCode interactionKey;
-    public bool scrollUpEnabled { get; private set; }
-    public bool scrollDownEnabled { get; private set; }
-    public bool interactionEnabled { get; private set; }
-    public bool flashEnabled { get; private set; }
-    public bool flashingMonster { get; private set; }
-
+    public KeyCode dropKey;
+    private int numberKeyDown;
 
     [SerializeReference]
     private GameObject monsterObject;
 
     [SerializeReference]
     private GameObject flashlight;
+
+    [SerializeReference]
+    private GameObject broomObject;
 
     #region get input
 
@@ -49,8 +65,29 @@ public class Player : MonoBehaviour
         return 0;
     }
 
-    private bool FacingMonster()
+    private bool ViewingMonster()
     {
+        if (monsterObject == null) { Debug.LogWarning("No monster object found"); return false; }
+        if (flashlight == null) { Debug.LogWarning("No flashlight objet found") ; return false; }
+        
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward);
+        for (int i = 0; i < hits.Length; i++)
+        {
+            RaycastHit h = hits[i];
+            Renderer rend = h.transform.GetComponent<Renderer>();
+            Debug.Log(h.collider.name);
+
+            if (rend)
+            {
+                // Change the material of all hit colliders
+                // to use a transparent shader.
+                rend.material.shader = Shader.Find("Transparent/Diffuse");
+                Color tempColor = rend.material.color;
+                tempColor.a = 0.3F;
+                rend.material.color = tempColor;
+            }
+        }
+
         //Calculate Flashlight Direction Unit Vector
         double flashlightAngle = flashlight.transform.eulerAngles.y * Math.PI / 180;
         double xComponent = Math.Sin(flashlightAngle);
@@ -63,13 +100,28 @@ public class Player : MonoBehaviour
         Vector2 monsterUnitVec2D = new Vector2(monsterLoc.x, monsterLoc.z);
 
         //Dot product the two vectors to see if the player is facing the monster
-        return Vector3.Dot(flashlightUnitVec2D, monsterUnitVec2D) > 0.97;
+        bool facing =  Vector3.Dot(flashlightUnitVec2D, monsterUnitVec2D) > 0.97;
+        if (!facing) { return false; }
+
+        //Check if we have actual line of sight to the monster
+        RaycastHit hit;
+        Physics.Raycast(transform.position, transform.forward, out hit);
+
+        if (hit.collider == null)                     {return false;}
+        if (hit.collider.gameObject.name != "Circler"){return false;}
+        
+
+        return true;
     }
+
 
     private void GetInputs()
     {
+        
         interactionEnabled = Input.GetKeyDown(interactionKey);
         int scrollResult = Scroll();
+        dropEnabled = Input.GetKeyDown(dropKey);
+
 
         if (scrollResult > 0){scrollUpEnabled = true;
         }else{scrollUpEnabled = false;}
@@ -80,6 +132,18 @@ public class Player : MonoBehaviour
        if (Input.GetMouseButton((int) MouseButton.Right) == true){ flashEnabled = true; }
        else { flashEnabled = false; }
 
+        sweepEnabled = Input.GetMouseButton((int)MouseButton.Left);
+
+        numberKeyDown = -1;
+        if (Input.GetKeyDown(KeyCode.Alpha1)) { numberKeyDown = 1; }
+        if (Input.GetKeyDown(KeyCode.Alpha2)) { numberKeyDown = 2; };
+        if (Input.GetKeyDown(KeyCode.Alpha3)) { numberKeyDown = 3; };
+        if (Input.GetKeyDown(KeyCode.Alpha4)) { numberKeyDown = 4; };
+        if (Input.GetKeyDown(KeyCode.Alpha5)) { numberKeyDown = 5; };
+        if (Input.GetKeyDown(KeyCode.Alpha6)) { numberKeyDown = 6; };
+        if (Input.GetKeyDown(KeyCode.Alpha7)) { numberKeyDown = 7; };
+        if (Input.GetKeyDown(KeyCode.Alpha8)) { numberKeyDown = 8; };
+
     }
 
     #endregion
@@ -87,27 +151,41 @@ public class Player : MonoBehaviour
     #region handle input
     private void HandleInputs()
     {
-        if (scrollDownEnabled){ inventory.SelectPreviousSlot();}
-        if(scrollUpEnabled   ){ inventory.SelectNextSlot();}
+        if (flashlight != null)  { flashlight.SetActive(flashEnabled);          }
+        if (numberKeyDown != -1) { inventory.slotSelected = numberKeyDown-1;    }
+        if (dropEnabled)         { inventory.DropItem(-1,transform.position);   }
+        if (scrollUpEnabled)   { interactionController.PreviousInteraction();   }
+        if (scrollDownEnabled) { interactionController.NextInteraction();       }
+        flashingMonster = flashEnabled && ViewingMonster();
 
-        flashingMonster = flashEnabled && FacingMonster(); // are we facing the monster and flashing?
-        flashlight.SetActive(flashEnabled);                // turn on flashlight if enabled
+        if (sweepState == SWEEPSTATES.idle){
+            if (sweepEnabled) { 
+                sweepState = SWEEPSTATES.sweeping;
+                broomObject.GetComponent<Animation>().Play();
+            }
+        }else if (sweepState == SWEEPSTATES.sweeping){
+            if (broomObject.GetComponent<Animation>().isPlaying == false){
+                sweepState = SWEEPSTATES.idle;
+            }
+        }
+       
     }
 
     #endregion
 
     private void Start()
     {
-        state = PLAYERSTATES.free;
+        state       = PLAYERSTATES.free;
+        sweepState  = SWEEPSTATES.idle;
     }
 
-    void Update()
-    {
+    private void Update(){
+        GetInputs();
+
         switch (state)
         {
             case (PLAYERSTATES.free):
                 this.GetComponent<FirstPersonMovement>().active = true;
-                GetInputs();
                 HandleInputs();
                 break;
             case (PLAYERSTATES.dialogue):

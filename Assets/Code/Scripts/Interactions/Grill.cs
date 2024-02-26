@@ -12,6 +12,8 @@ public class Grill : MonoBehaviour, Interaction
     [SerializeField]
     private GameObject pattyPrefab;
     [SerializeField]
+    private GameObject pattyPrefabDone;
+    [SerializeField]
     private Inventory playerInventory;
 
     private int pattyCount;
@@ -77,7 +79,7 @@ public class Grill : MonoBehaviour, Interaction
                 patty.Cook();
                 if (patty.Done())
                 {
-                    Debug.Log("a patty is done - " + i.ToString());
+                    
                     patty.done = true;
                 }
             }
@@ -155,7 +157,10 @@ public class Grill : MonoBehaviour, Interaction
         for (int i = 0; i < pattyCapacity; i++)
         {
             this.pattyObjList[i] = Instantiate(pattyPrefab, transform.position, Quaternion.identity, transform);
-            this.pattyObjList[i].transform.Translate(new Vector3(i * offsetPatty - offsetOrigin, 0.20f, 0f));
+            this.pattyObjList[i].transform.Translate(new Vector3(0f, 0.20f, i * offsetPatty - offsetOrigin));
+            Vector3 prevScale = this.pattyObjList[i].transform.localScale;
+            prevScale.z = prevScale.z / 2.0f;
+            this.pattyObjList[i].transform.localScale = prevScale;
             this.pattyObjList[i].SetActive(false);
         }
     }
