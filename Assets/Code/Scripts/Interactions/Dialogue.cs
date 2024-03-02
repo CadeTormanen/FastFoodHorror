@@ -42,7 +42,8 @@ public class Dialogue : MonoBehaviour
     }
     public void StartMonologue()
     {
-         index = 0;
+        if (inUse) return;
+        index = 0;
         gameObject.SetActive(true);
         StartCoroutine(TypeLine());
         inUse=true;
