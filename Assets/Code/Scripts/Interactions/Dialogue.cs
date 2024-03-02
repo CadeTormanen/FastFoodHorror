@@ -34,6 +34,7 @@ public class Dialogue : MonoBehaviour
 
     public void StartDialogue()
     {
+        if (inUse)return;
         index = 0;
         gameObject.SetActive(true);
         textComponent.text = lines[index];
