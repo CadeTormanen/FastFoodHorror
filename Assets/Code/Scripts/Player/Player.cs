@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
 public class Player : MonoBehaviour
 {
     public enum PLAYERSTATES
@@ -18,6 +19,13 @@ public class Player : MonoBehaviour
     {
         idle,
         sweeping
+    }
+
+    public enum MouseButton
+    {
+        Left,
+        Right,
+        Middle
     }
 
     public SWEEPSTATES sweepState;

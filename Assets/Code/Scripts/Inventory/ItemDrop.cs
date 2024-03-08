@@ -18,7 +18,7 @@ public class ItemDrop : MonoBehaviour, Interaction
 
     public void ExecuteInteraction()
     {
-        playerInventory.Add(this.item.id, 1);
+        playerInventory.Add(this.item.id);
         Destroy(gameObject);
     }
 
@@ -35,8 +35,23 @@ public class ItemDrop : MonoBehaviour, Interaction
 
     public void Start()
     {
-        playerInventory = GameObject.Find("Inventory").GetComponent<Inventory>();
-        transform.parent = GameObject.Find("interactions").transform;
+        if (playerInventory != null)
+        {
+            playerInventory = GameObject.Find("Inventory").GetComponent<Inventory>();
+        }
+
+        if (GameObject.Find("interactions") != null)
+        {
+            transform.parent = GameObject.Find("interactions").transform;
+        }
+
+        if (model == null)
+        {
+            model = new GameObject();
+            model.AddComponent<MeshCollider>();
+        }
+
+        
     }
 
 }

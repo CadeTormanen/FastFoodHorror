@@ -15,14 +15,28 @@ public class Inventory : MonoBehaviour
     public int slotHeight;
     public int slotPadding;
     public int slotSelected;
+    public bool draw;
+    public bool hudInit;
 
-    private Hashtable itemMap;                // stores stats of each item
     private List<ItemData.Item> array;                 // stores the actual items 
     private GameObject[] invSlotObjectsArray; // stores all the inventory slot objects
     private GameObject invHighlightObject;    // stores the inventory object that highlights the selected slot
-    private int slotsOccupied;
    
     #region UI
+
+
+    //ensures no null references will take place.
+    private void CreateIfNull()
+    {
+        if (slots == 0) { slots = 8; }
+        if (ItemDataObject == null)
+        {
+            GameObject ItemDataObjectGO = new GameObject("ItemData");
+            ItemDataObject = ItemDataObjectGO.AddComponent<ItemData>();
+        }
+    }
+
+
 
     private GameObject CreateInventorySlot(string name)
     {
@@ -107,9 +121,11 @@ public class Inventory : MonoBehaviour
     /// Linear search for a free spot in the array. Return -1 on non-existance.
     private int SeekFreeSlot()
     {
+        Debug.Log(array.Count);
         for (int i = 0; i < array.Count; i++)
         {
             ItemData.Item item = array[i];
+            Debug.Log(item);
             if (item == null) { return i; }
         }
         return -1;
@@ -119,31 +135,16 @@ public class Inventory : MonoBehaviour
 
     #region Interface Functions
     /// Add "count" of an item to the inventory
-    public int Add(string id, int count)
+    public int Add(string id)
     {
-        //does this item already exist in the inventory?
-        int itemIndex = ItemExists(id);
+        if (!ItemDataObject.IsItem(id)) { return -1; }
 
         // not present in inventory -> create new item
-        if (itemIndex < 0)
+        int freeSlot = SeekFreeSlot();
+        if (freeSlot != -1)
         {
-            int nextFreeSlot = SeekFreeSlot();
-            if (nextFreeSlot != -1)
-            {
-                array[nextFreeSlot] = ItemDataObject.GetNewItem(id);
-                return 1;
-            }
-        }
-
-        // present in inventory -> increment existing item
-        else
-        {
-            int freeSlot = SeekFreeSlot();
-            if (freeSlot != -1)
-            {
-                array[freeSlot] = ItemDataObject.GetNewItem(id);
-                return 1;
-            }
+            array[freeSlot] = ItemDataObject.GetNewItem(id);
+            return 1;
         }
         return 0;
     }
@@ -185,15 +186,43 @@ public class Inventory : MonoBehaviour
         return item;
     }
 
-    public void DropItem(int slot, Vector3 whereAt)
+    public ItemData.Item Remove(string id, int count)
+    {
+        int slot = ItemExists(id);
+        if (slot == -1) { return null; }
+        ItemData.Item item = array[slot];
+        array[slot] = null;
+        return item;
+    }
+
+    public ItemData.Item Remove(string id)
+    {
+        int slot = ItemExists(id);
+        if (slot == -1) { return null; }
+        ItemData.Item item = array[slot];
+        array[slot] = null;
+        return item;
+    }
+
+    public GameObject DropItem(int slot, Vector3 whereAt)
     {
         if (slot == -1) { slot = slotSelected; }
         ItemData.Item item = array[slot];
-        if (item == null) { return; }
-        GameObject dropObject       = Instantiate(item.model, whereAt, Quaternion.identity, transform);
+        if (item == null) { return null; }
+        GameObject dropObject;
+        if (item.model != null)
+        {
+            dropObject = Instantiate(item.model, whereAt, Quaternion.identity, transform);
+        }
+        else
+        {
+            dropObject = new GameObject();
+        }
+        
         ItemDrop itemDrop           = dropObject.AddComponent<ItemDrop>();
         itemDrop.Bind(item);
         array[slot] = null;
+        return dropObject;
     }
 
     /// Go to Next Slot
@@ -217,17 +246,33 @@ public class Inventory : MonoBehaviour
         return ItemDataObject.GetKeyItemStatus(id);
     }
 
+    public int SlotNumber()
+    {
+        return this.slots;
+    }
+
     #endregion
 
     public void Update()
     {
-        UpdateInventoryImage();
+        if (draw == true)
+        {
+            if (hudInit == false)
+            {
+                invSlotObjectsArray = CreateInventoryHUD();
+            }
+            UpdateInventoryImage();
+        }
+        
     }
 
     public void Start()
     {
-        array = new List<ItemData.Item>();
+        slotSelected = 0;
+        hudInit      = false;
+        draw         = false;
+        array        = new List<ItemData.Item>();
         for (int i = 0; i < slots; i++) { array.Add(null); }
-        invSlotObjectsArray = CreateInventoryHUD();
+        CreateIfNull();
     }
 }

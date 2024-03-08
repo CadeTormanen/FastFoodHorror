@@ -21,7 +21,7 @@ public class Cooler : MonoBehaviour, Interaction
 
     public void ExecuteInteraction()
     {
-        playerInventory.Add(this.itemString, this.numberOfItemsToGive);
+        playerInventory.Add(this.itemString);
     }
 
     public void ValidateInteraction()

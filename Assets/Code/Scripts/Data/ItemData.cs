@@ -51,12 +51,26 @@ public class ItemData : MonoBehaviour
     {
         Hashtable map = new Hashtable();
 
-        Sprite pattyRawSprite       = Sprite.Create(inventoryBucketPattyRawTexture, new Rect(0, 0, inventoryBucketPattyRawTexture.width, inventoryBucketPattyRawTexture.height), Vector2.zero);
-        Sprite pattyCookedSprite    = Sprite.Create(inventoryBucketPattyCookedTexture, new Rect(0, 0, inventoryBucketPattyCookedTexture.width, inventoryBucketPattyCookedTexture.height), Vector2.zero);
-        Sprite cupEmptySprite       = Sprite.Create(inventoryBucketCupEmptyTexture, new Rect(0, 0, inventoryBucketCupEmptyTexture.width, inventoryBucketCupEmptyTexture.height), Vector2.zero);
-        Sprite cupFullSprite        = Sprite.Create(inventoryBucketCupFullTexture, new Rect(0, 0, inventoryBucketCupFullTexture.width, inventoryBucketCupFullTexture.height), Vector2.zero);
-        Sprite keySprite            = Sprite.Create(inventoryBucketKeyTexture, new Rect(0, 0, inventoryBucketKeyTexture.width, inventoryBucketKeyTexture.height), Vector2.zero);
-        Sprite emptySprite          = Sprite.Create(inventoryBucketEmptyTexture, new Rect(0, 0, inventoryBucketEmptyTexture.width, inventoryBucketEmptyTexture.height), Vector2.zero);
+        Sprite pattyRawSprite       = null;
+        Sprite pattyCookedSprite    = null;
+        Sprite cupEmptySprite       = null;
+        Sprite cupFullSprite        = null;
+        Sprite keySprite            = null;
+        Sprite emptySprite          = null;
+
+
+        try { 
+            pattyRawSprite       = Sprite.Create(inventoryBucketPattyRawTexture, new Rect(0, 0, inventoryBucketPattyRawTexture.width, inventoryBucketPattyRawTexture.height), Vector2.zero);
+            pattyCookedSprite    = Sprite.Create(inventoryBucketPattyCookedTexture, new Rect(0, 0, inventoryBucketPattyCookedTexture.width, inventoryBucketPattyCookedTexture.height), Vector2.zero);
+            cupEmptySprite       = Sprite.Create(inventoryBucketCupEmptyTexture, new Rect(0, 0, inventoryBucketCupEmptyTexture.width, inventoryBucketCupEmptyTexture.height), Vector2.zero);
+            cupFullSprite        = Sprite.Create(inventoryBucketCupFullTexture, new Rect(0, 0, inventoryBucketCupFullTexture.width, inventoryBucketCupFullTexture.height), Vector2.zero);
+            keySprite            = Sprite.Create(inventoryBucketKeyTexture, new Rect(0, 0, inventoryBucketKeyTexture.width, inventoryBucketKeyTexture.height), Vector2.zero);
+            emptySprite          = Sprite.Create(inventoryBucketEmptyTexture, new Rect(0, 0, inventoryBucketEmptyTexture.width, inventoryBucketEmptyTexture.height), Vector2.zero);
+        }
+        catch
+        {
+            Debug.Log("failed to create sprites for inventory");
+        }
 
         map.Add("patty_raw",    new Item("patty_raw", 1, 12,    pattyRawSprite, false, false,modelPattyRaw));
         map.Add("patty_cooked", new Item("patty_cooked", 1, 12, pattyCookedSprite, false, false, modelPattyCooked));
@@ -75,6 +89,11 @@ public class ItemData : MonoBehaviour
         Item refItem = (Item) itemInfoMap[id];
         Item newItem = new Item(refItem.id, 1, refItem.maxcount, refItem.sprite, refItem.stackable, refItem.keyItem,refItem.model);
         return newItem;
+    }
+
+    public bool IsItem(string id)
+    {
+        return itemInfoMap.ContainsKey(id);
     }
 
     // Get the inventory thumbnail sprite associated with the item called 'id'
