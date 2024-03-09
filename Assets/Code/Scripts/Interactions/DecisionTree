@@ -1,0 +1,35 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DecisionTree : MonoBehaviour
+{
+    //where found information
+    int nodeNumber;
+    string playerResponse;
+    string dialoguePrompt;
+    LinkedList<DecisionTree> pointers;
+    
+    // Start is called before the first frame update
+    void Start()
+    {
+        pointers=null;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+    //initialize tree
+    //print current node of tree
+    public string PlayerResponse()
+    {
+        return playerResponse;
+    }
+    public string DialougePrompt()
+    {
+        return dialoguePrompt;
+    }
+
+}
