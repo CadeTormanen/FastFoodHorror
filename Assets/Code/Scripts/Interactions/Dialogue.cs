@@ -18,7 +18,6 @@ public class Dialogue : MonoBehaviour
     {
         //for empty string to type into:
         textComponent.text = string.Empty;
-        //StartMonologue();
         StartMonologue();
         inUse=true;
     }
