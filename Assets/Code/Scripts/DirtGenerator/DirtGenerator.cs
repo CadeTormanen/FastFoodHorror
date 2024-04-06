@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class DirtGenerator : MonoBehaviour
 {
@@ -12,7 +13,6 @@ public class DirtGenerator : MonoBehaviour
     private int x;
     private int y;
 
-    private GameObject[] dirtPiles;
     public float sweepingRange;
     public int maxPiles;
     private int numPiles;
@@ -22,49 +22,47 @@ public class DirtGenerator : MonoBehaviour
     private float timeBetweenThisGeneration;
     private float timeSinceLastGeneration;
     
-
-
     private void CreateDirt()
     {
         if (numPiles >= maxPiles) { return; }
 
-        for(int i=0; i < maxPiles; i++)
-        {
-            if (dirtPiles[i] == null) { 
-                float xPos = Random.Range(0f, width);
-                float yPos = Random.Range(0f, height);
-                Vector3 placement = new Vector3(xPos, 0, yPos);
-                GameObject newDirt = Instantiate(dirtPrefab, transform, false);
-                Dirt newDirtComp = newDirt.AddComponent<Dirt>();
-                newDirt.transform.Translate(placement);
-                dirtPiles[i] = newDirt;
-                return;
-            }
-        }
-
-       
+        float xPos         = Random.Range(0f, width);
+        float yPos         = Random.Range(0f, height);
+        Vector3 placement  = new Vector3(xPos, 0, yPos);
+        GameObject newDirt = Instantiate(dirtPrefab, transform, false);
+        Dirt newDirtComp   = newDirt.AddComponent<Dirt>();
+        newDirtComp.hp     = 100;
+        newDirtComp.alive  = true;
+        newDirt.transform.Translate(placement);
+        Debug.Log("created a dirt");
+        numPiles++;
     }
 
     private void CheckDirt()
     {
-        for (int i = 0; i < maxPiles; i++)
+        foreach (Transform child in this.transform)
         {
-            if (dirtPiles[i] != null)
+            // Dirt is dead
+            if (child.GetComponent<Dirt>().alive == false)
             {
-                //check if dirt is being swept
-                if ((Vector3.Distance(dirtPiles[i].transform.position, playerObject.transform.position) <= sweepingRange) && playerObject.GetComponent<Player>().sweepState == Player.SWEEPSTATES.sweeping)
-                {
-                    dirtPiles[i].GetComponent<Dirt>().GetSwept();
-                }
-
-
-                //check if dirt is completely swept
-                if (dirtPiles[i].GetComponent<Dirt>().Alive() == false)
-                {
-                    dirtPiles[i] = null;
-                    numPiles--;
-                }
+                Destroy(child.gameObject);
+                Debug.Log("destroyed a dirt");
+                numPiles--;
+                continue;
             }
+
+            //Dirt is dying
+            if (child.GetComponent<Dirt>().hp <= 0) {
+                continue; 
+            }   
+
+
+            //Dirt is being swept
+            if ((Vector3.Distance(child.transform.position, playerObject.GetComponent<Player>().GetBroomHeadPosition()) <= sweepingRange) && playerObject.GetComponent<Player>().sweepState == Player.SWEEPSTATES.sweeping)
+            {
+                child.GetComponent<Dirt>().Kill();
+            }
+
         }
     }
 
@@ -84,7 +82,6 @@ public class DirtGenerator : MonoBehaviour
     public void Start()
     {
         numPiles = 0;
-        dirtPiles = new GameObject[maxPiles];
         x = (int) transform.position.x;
         y = (int) transform.position.z;
         timeSinceLastGeneration = 0;

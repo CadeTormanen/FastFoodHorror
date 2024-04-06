@@ -46,7 +46,7 @@ public class Player : MonoBehaviour
     private GameObject flashlight;
 
     [SerializeReference]
-    private GameObject broomObject;
+    public GameObject broomObject;
 
     #region get input
 
@@ -68,14 +68,13 @@ public class Player : MonoBehaviour
     private bool ViewingMonster()
     {
         if (monsterObject == null) { Debug.LogWarning("No monster object found"); return false; }
-        if (flashlight == null) { Debug.LogWarning("No flashlight objet found") ; return false; }
+        if (flashlight    == null) { Debug.LogWarning("No flashlight objet found") ; return false; }
         
         RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward);
         for (int i = 0; i < hits.Length; i++)
         {
             RaycastHit h = hits[i];
             Renderer rend = h.transform.GetComponent<Renderer>();
-            Debug.Log(h.collider.name);
 
             if (rend)
             {
@@ -173,6 +172,13 @@ public class Player : MonoBehaviour
 
     #endregion
 
+   
+    public Vector3 GetBroomHeadPosition()
+    {
+        return broomObject.transform.position;
+    }
+    
+    
     private void Start()
     {
         state       = PLAYERSTATES.free;

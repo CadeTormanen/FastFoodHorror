@@ -7,9 +7,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 682850682042677386, guid: b5ab8e4e55ea5494e870e8cec234062c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2777393197091954455, guid: b5ab8e4e55ea5494e870e8cec234062c, type: 3}
       propertyPath: m_Name
       value: patty_cooked_drop Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 5182878995093450128, guid: b5ab8e4e55ea5494e870e8cec234062c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5784587104827920111, guid: b5ab8e4e55ea5494e870e8cec234062c, type: 3}
       propertyPath: m_Materials.Array.data[0]

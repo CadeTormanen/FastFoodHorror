@@ -34,7 +34,7 @@ public class Story : MonoBehaviour
     {
         if (readables.ContainsKey(title))
         {
-            storyChain.lines[0]=readables[title];
+            storyChain.lines[0] = (string) readables[title];
             storyChain.StartMonologue();  
         }
     }

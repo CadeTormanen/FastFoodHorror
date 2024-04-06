@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7985034027233839310}
   - component: {fileID: 5784587104827920111}
   - component: {fileID: 682850682042677386}
+  - component: {fileID: 5182878995093450128}
   m_Layer: 0
   m_Name: patty_raw_drop
   m_TagString: Untagged
@@ -93,8 +94,24 @@ CapsuleCollider:
   m_GameObject: {fileID: 2777393197091954455}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5000001
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!111 &5182878995093450128
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2777393197091954455}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 4f73d8bbead2ae64d9c08f81a1afe30b, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 4f73d8bbead2ae64d9c08f81a1afe30b, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
