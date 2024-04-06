@@ -5,6 +5,7 @@ using UnityEngine;
 public class Node
 {
 	public string playerResponse;
+	public string dialoguePrompt;
 	public string fullResponse;
 	public string dialougePrompt;
 	public LinkedList<Node> pointers;
@@ -40,10 +41,5 @@ public class Node
 	}
 	public string PrintResponse()
 	{
-		return fullResponse;
-	}
-	public string printPrompt()
-	{
-		return dialougePrompt;
 	}
 }

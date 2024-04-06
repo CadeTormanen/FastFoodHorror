@@ -105,7 +105,7 @@ public class Inventory : MonoBehaviour
 
 
     /// Linear search for a free spot in the array. Return -1 on non-existance.
-    private int SeekFreeSlot()
+    public int SeekFreeSlot()
     {
         for (int i = 0; i < array.Count; i++)
         {
@@ -192,6 +192,8 @@ public class Inventory : MonoBehaviour
         if (item == null) { return; }
         GameObject dropObject       = Instantiate(item.model, whereAt, Quaternion.identity, transform);
         ItemDrop itemDrop           = dropObject.AddComponent<ItemDrop>();
+        Debug.Log(dropObject.GetComponent<Animation>());
+
         itemDrop.Bind(item);
         array[slot] = null;
     }
