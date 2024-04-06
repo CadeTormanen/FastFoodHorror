@@ -8,14 +8,15 @@ public class Node
 	public string dialoguePrompt;
 	public string fullResponse;
 	public string dialougePrompt;
-	public LinkedList<Node> pointers;
+	Node decision1;
+	Node decision2;
 
 	public Node FetchNode(int branchNum)
 	{
 		Node current=null;
 		if(pointers == null)return null;
-		//if (branchNum == 1) current=this.pointers.Find(leaf1);
-		//if (branchNum == 2) current=this.pointers.Find(leaf2);
+		if (branchNum == 1) current=decision1;
+		if (branchNum == 2) current=decision2;
 		return current;
 	}
 	public Node SetNode(string buttonText, string prompt, string full)
@@ -24,16 +25,20 @@ public class Node
 		this.playerResponse=buttonText;
 		this.dialougePrompt=prompt;
 		this.fullResponse=full;
-		pointers=null;
+		decisions1=null;
+		decisions2=null;
 		return this;
 	}
 	public void ConnectNode(Node leaf)
 	{
-		if (pointers == null)
+		if (decision1 == null)
 		{
-			pointers= new LinkedList<Node>();
+			decision1=leaf;
 		}
-		this.pointers.AddLast(leaf);
+		if (decision2 == null)
+		{
+			decision2=leaf;
+		}
 	}
 	public string PrintButtonText()
 	{
