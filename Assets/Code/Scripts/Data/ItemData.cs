@@ -27,7 +27,8 @@ public class ItemData : MonoBehaviour
     [SerializeField] private GameObject modelCupFull;
     [SerializeField] private GameObject modelCheese;
     [SerializeField] private GameObject modelMustard;
-    [SerializeField] private GameObject modelBun;
+    [SerializeField] private GameObject modelBunTop;
+    [SerializeField] private GameObject modelBunBottom;
     [SerializeField] private GameObject modelKetchup;
     [SerializeField] private GameObject modelLettuce;
 
@@ -83,11 +84,12 @@ public class ItemData : MonoBehaviour
         map.Add("key",            new Item("key", 1, 1,keySprite, false, true));
         map.Add("empty",          new Item("empty", 1, 1,emptySprite, false, false));
         map.Add("broom",          new Item("broom", 1, 1,broomSprite, false, false));
-        map.Add("buns",           new Item("buns", 1, 1,bunSprite, false, false    ));
-        map.Add("cheese",         new Item("cheese", 1, 1,cheeseSprite, false, false ));
-        map.Add("ketchup",        new Item("ketchup", 1, 1,ketchupSprite, false, false));
-        map.Add("mustard",        new Item("mustard", 1, 1,mustardSprite, false, false));
-        map.Add("lettuce",        new Item("lettuce", 1, 1,lettuceSprite, false, false));
+        map.Add("bun_top",        new Item("bun_top", 1, 1,bunSprite, false, false, modelBunTop));
+        map.Add("bun_bottom",     new Item("bun_bottom", 1, 1,bunSprite, false, false, modelBunBottom));
+        map.Add("cheese",         new Item("cheese", 1, 1,cheeseSprite, false, false, modelCheese));
+        map.Add("ketchup",        new Item("ketchup", 1, 1,ketchupSprite, false, false, modelKetchup));
+        map.Add("mustard",        new Item("mustard", 1, 1,mustardSprite, false, false, modelMustard));
+        map.Add("lettuce",        new Item("lettuce", 1, 1,lettuceSprite, false, false,modelLettuce));
 
         return map;
     }

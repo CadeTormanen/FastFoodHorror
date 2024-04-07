@@ -50,7 +50,7 @@ public class BurgerAssembler : MonoBehaviour, Interaction
     public void ExecuteInteraction()
     {
         ItemData.Item item = (playerInventory.GetSelectedItem());
-        Debug.Log(Add(item.id));
+        Add(item.id);
         playerInventory.Remove(item.id, 1, playerInventory.slotSelected);
     }
 
@@ -63,8 +63,8 @@ public class BurgerAssembler : MonoBehaviour, Interaction
     public bool Possible()
     {
         ItemData.Item item = (playerInventory.GetSelectedItem()) ;
+        
         if (item == null) { return false; }
-        Debug.Log(item.id);
         if (CanAdd(item.id) == true) return true;
         return false;
     }            
@@ -94,9 +94,9 @@ public class BurgerAssembler : MonoBehaviour, Interaction
         map.Add("ketchup", Ingredients.KETCHUP);
         map.Add("mustard", Ingredients.MUSTARD);
         map.Add("cheese", Ingredients.CHEESE);
-        map.Add("buns", Ingredients.LOWER_BUN);
-       // map.Add("bun", Ingredients.UPPER_BUN);
-
+        map.Add("bun_bottom", Ingredients.LOWER_BUN);
+        map.Add("bun_top", Ingredients.UPPER_BUN);
+       
         return map;
     }
 
@@ -143,7 +143,9 @@ public class BurgerAssembler : MonoBehaviour, Interaction
     // Returns 1 upon successful addition. Returns 0 on failed addition.
     public int Add(Ingredients ingredient)
     {
+        Debug.Log("Adding...");
         if (this.Burger[(int)ingredient] == true) return 0;
+        Debug.Log("Item not already on burger");
 
         Ingredients prereq     = (Ingredients) PrereqMap[ingredient];
         bool prereqMet         = this.Burger[(int) prereq];
@@ -243,5 +245,11 @@ public class BurgerAssembler : MonoBehaviour, Interaction
         itemToIngredientMap = CreateItemToIngredientMap();
         Burger              = CreateEmptyBurger();
         IngredientModels    = GetIngredientModels();
+        PlacedIngredients   = new ArrayList();
+    }
+
+    public void Update()
+    {
+
     }
 }
