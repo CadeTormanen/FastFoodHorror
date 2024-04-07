@@ -32,11 +32,16 @@ public class InteractionController : MonoBehaviour
             if (Vector3.Distance(child.position, playerCharacterObject.transform.position) <= interactionDistance)
             {
                 //add nearby interaction to the queue if it is valid in the current context
-                Interaction interaction = child.GetComponent<Interaction>();
-                if (interaction.Possible() == true)
+                Interaction[] interactions = child.GetComponents<Interaction>();
+                foreach(Interaction interaction in interactions)
                 {
-                    interactionQueue.Enqueue(interaction);
+                    if (interaction.Possible() == true)
+                    {
+                        
+                        interactionQueue.Enqueue(interaction);
+                    }
                 }
+
             }
         }
     }
@@ -66,8 +71,6 @@ public class InteractionController : MonoBehaviour
             lowerBound = interactionSelected - 1;
         }
 
-
-
         //take all interactions from queue and put into array
         Interaction[] actionArray = new Interaction[interactions];
         for (int i = 0; i < interactions; i++)
@@ -90,6 +93,7 @@ public class InteractionController : MonoBehaviour
 
         //check player input: for activating the selected interaction
         if (playerObject.GetComponent<Player>().interactionEnabled){
+            
             actionArray[interactionSelected].ExecuteInteraction();
         }
 

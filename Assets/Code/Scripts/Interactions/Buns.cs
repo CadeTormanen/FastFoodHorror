@@ -12,7 +12,6 @@ public class Buns : MonoBehaviour, Interaction
     [SerializeField]
     private int numberOfItemsToGive;
 
-
     public bool Possible()
     {
         interactionText = "Take Hamburger\nBun";
