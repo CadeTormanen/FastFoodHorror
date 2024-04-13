@@ -14,7 +14,8 @@ public class ItemData : MonoBehaviour
     [SerializeField] private Texture2D inventoryBucketCupEmptyTexture;
     [SerializeField] private Texture2D inventoryBucketCupFullTexture;
     [SerializeField] private Texture2D inventoryBucketBroomTexture;
-
+    [SerializeField] private Texture2D inventoryBucketFryRawTexture;
+    [SerializeField] private Texture2D inventoryBucketFryCookedTexture;
     [SerializeField] private Texture2D inventoryBucketBunTexture;
     [SerializeField] private Texture2D inventoryBucketKetchupTexture;
     [SerializeField] private Texture2D inventoryBucketMustardTexture;
@@ -31,7 +32,8 @@ public class ItemData : MonoBehaviour
     [SerializeField] private GameObject modelBunBottom;
     [SerializeField] private GameObject modelKetchup;
     [SerializeField] private GameObject modelLettuce;
-
+    [SerializeField] private GameObject modelFryRaw;
+    [SerializeField] private GameObject modelFryCooked;
     public class Item
     {
         public string id;
@@ -76,7 +78,11 @@ public class ItemData : MonoBehaviour
         Sprite lettuceSprite       = Sprite.Create(inventoryBucketLettuceTexture, new Rect(0, 0, inventoryBucketLettuceTexture.width, inventoryBucketLettuceTexture.height), Vector2.zero);
         Sprite bunSprite           = Sprite.Create(inventoryBucketBunTexture, new Rect(0, 0, inventoryBucketBunTexture.width, inventoryBucketBunTexture.height), Vector2.zero);
         Sprite emptySprite         = Sprite.Create(inventoryBucketEmptyTexture, new Rect(0, 0, inventoryBucketEmptyTexture.width, inventoryBucketEmptyTexture.height), Vector2.zero);
-                                           //name(string)   count(int)   max-count(int)   sprite(Sprite)   stackable(bool)?   keyitem(bool)?   model(gameobject)?
+        Sprite fryRawSprite        = Sprite.Create(inventoryBucketFryRawTexture, new Rect(0, 0, inventoryBucketFryRawTexture.width, inventoryBucketFryRawTexture.height), Vector2.zero);
+        Sprite fryCookedSprite     = Sprite.Create(inventoryBucketFryCookedTexture, new Rect(0, 0, inventoryBucketFryCookedTexture.width, inventoryBucketFryCookedTexture.height), Vector2.zero);
+            
+        
+        //name(string)   count(int)   max-count(int)   sprite(Sprite)   stackable(bool)?   keyitem(bool)?   model(gameobject)?
         map.Add("patty_raw",      new Item("patty_raw", 1, 12,pattyRawSprite, false, false,modelPattyRaw));
         map.Add("patty_cooked",   new Item("patty_cooked", 1, 12,pattyCookedSprite, false, false, modelPattyCooked));
         map.Add("cup_empty",      new Item("cup_empty", 1, 12,cupEmptySprite, false, false,modelCupEmpty));
@@ -90,6 +96,8 @@ public class ItemData : MonoBehaviour
         map.Add("ketchup",        new Item("ketchup", 1, 1,ketchupSprite, false, false, modelKetchup));
         map.Add("mustard",        new Item("mustard", 1, 1,mustardSprite, false, false, modelMustard));
         map.Add("lettuce",        new Item("lettuce", 1, 1,lettuceSprite, false, false,modelLettuce));
+        map.Add("french_fry_raw", new Item("french_fry_raw", 1, 1, fryRawSprite, false, false,modelFryRaw));
+        map.Add("french_fry_done",new Item("french_fry_done", 1, 1, fryCookedSprite, false, false,modelFryCooked));
 
         return map;
     }

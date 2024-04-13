@@ -26,6 +26,9 @@ public class Player : MonoBehaviour
     [SerializeField] private InteractionController interactionController;
     [SerializeReference] private Inventory inventory;
 
+    private ItemData.Item equippedItem;
+    private String equippedItemString;
+
     public PLAYERSTATES state       { get; set; }
     public bool scrollUpEnabled     { get; private set; }
     public bool scrollDownEnabled   { get; private set; }
@@ -67,7 +70,7 @@ public class Player : MonoBehaviour
 
     private bool ViewingMonster()
     {
-        if (monsterObject == null) { Debug.LogWarning("No monster object found"); return false; }
+        if (monsterObject == null) { Debug.LogWarning("No monster object found")   ; return false; }
         if (flashlight    == null) { Debug.LogWarning("No flashlight objet found") ; return false; }
         
         RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward);
@@ -116,11 +119,25 @@ public class Player : MonoBehaviour
 
     private void GetInputs()
     {
-        
+        equippedItem = inventory.GetSelectedItem();
+        if (equippedItem == null) equippedItemString = "none";
+        else equippedItemString = equippedItem.id;
+
+        //broom
+        if (equippedItemString == "broom"){
+            broomObject.SetActive(true);
+            sweepEnabled = Input.GetMouseButton((int)MouseButton.Left);
+        }
+        else{
+            broomObject.GetComponent<Animation>().Sample();
+            broomObject.SetActive(false);
+            sweepEnabled = false;
+        }
+
+        //interactions
         interactionEnabled = Input.GetKeyDown(interactionKey);
         int scrollResult = Scroll();
         dropEnabled = Input.GetKeyDown(dropKey);
-
 
         if (scrollResult > 0){scrollUpEnabled = true;
         }else{scrollUpEnabled = false;}
@@ -131,7 +148,7 @@ public class Player : MonoBehaviour
        if (Input.GetMouseButton((int) MouseButton.Right) == true){ flashEnabled = true; }
        else { flashEnabled = false; }
 
-        sweepEnabled = Input.GetMouseButton((int)MouseButton.Left);
+        
 
         numberKeyDown = -1;
         if (Input.GetKeyDown(KeyCode.Alpha1)) { numberKeyDown = 1; }
@@ -183,6 +200,7 @@ public class Player : MonoBehaviour
     {
         state       = PLAYERSTATES.free;
         sweepState  = SWEEPSTATES.idle;
+        broomObject.SetActive(false);
     }
 
     private void Update(){
