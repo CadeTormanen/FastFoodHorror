@@ -7,8 +7,8 @@ public class Ingredient
     public GameObject prefab;
 }
 
-public class AsmGame : MonoBehaviour
-{
+public class AsmGame : MonoBehaviour{
+
     public Ingredient[] ingredients;
     private GameObject currentBurg;
     private int score = 0;
@@ -25,7 +25,6 @@ public class AsmGame : MonoBehaviour
 
     void Start()
     {
-        StartNewBurger();
         // Initialize ingredients array
         ingredients = new Ingredient[] {
             new Ingredient() { ingredientName = "top bun", prefab = topBunPrefab },
@@ -35,6 +34,8 @@ public class AsmGame : MonoBehaviour
             new Ingredient() { ingredientName = "ketchup", prefab = ketchupPrefab },
             new Ingredient() { ingredientName = "mustard", prefab = mustardPrefab }
         };
+        currentBurg = new GameObject("Burger");
+        currentBurg.transform.position = spawnPoint.position; // Start with an empty burger at the spawn point
     }
 
     void Update()
@@ -48,15 +49,6 @@ public class AsmGame : MonoBehaviour
     public GameObject GetCurrentBurg()
     {
         return currentBurg;
-    }
-
-    public void StartNewBurger()
-    {
-        if (currentBurg != null)
-        { 
-            Destroy(currentBurg);
-        }
-        currentBurg = new GameObject("Burger");
     }
 
     public void AddIngredient(string ingredientName)
@@ -77,18 +69,6 @@ public class AsmGame : MonoBehaviour
         }
     }
 
-    public bool HasIngredient(string ingredientName)
-    {
-        foreach (Transform child in currentBurg.transform)
-        {
-            if (child.gameObject.name.StartsWith(ingredientName, StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void FinishBurger()
     {
         AddScore(1); // Add one to the score
@@ -104,29 +84,16 @@ public class AsmGame : MonoBehaviour
             Debug.LogWarning("AudioSource or AudioClip is missing.");
         }
 
-        if (currentBurg != null)
-        {
-            currentBurg.SetActive(false);
-        }
+        currentBurg = new GameObject("Burger"); // Start a new burger after finishing the current one
+        currentBurg.transform.position = spawnPoint.position; // Reset position for new burger
     }
-
-    // New method to get the current score
     public int GetScore()
     {
         return score;
     }
 
-    // New method to add to the score
     public void AddScore(int amount)
     {
         score += amount;
-    }
-
-    // New method to reset the game
-    public void ResetGame()
-    {
-        StartNewBurger(); // Resets or starts a new burger
-        score = 0; // Reset score to 0
-        // Any other reset logic can be added here
     }
 }
