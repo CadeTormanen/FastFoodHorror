@@ -20,6 +20,8 @@ public class InteractionController : MonoBehaviour
     private int upperBound;
     private int interactions;
 
+    
+
     /// <summary>
     /// Get all interactions within 'interactionDistance' and enqueue them.
     /// </summary>
@@ -83,17 +85,9 @@ public class InteractionController : MonoBehaviour
         {
             if ((i < 0) || (i >= interactions)){continue;}
             if (i == interactionSelected){
-<<<<<<< HEAD:Assets/Code/Scripts/Interactions/InteractionController.cs
-<<<<<<< HEAD:Assets/Code/Scripts/Interactions/Interface and Controller/InteractionController.cs
-                displayText += ("   " + actionArray[i].interactionText + "\n");
-=======
                 displayText += ("> " + i.ToString() + " " + actionArray[i].interactionText + "\n");
->>>>>>> parent of 2cb752b8 (Incorporate 'Cade/Pathing' paths, Create customers, register):Assets/Code/Scripts/Interactions/InteractionController.cs
-=======
-                displayText += ("> " + i.ToString() + " " + actionArray[i].interactionText + "\n");
->>>>>>> parent of 2cb752b8 (Incorporate 'Cade/Pathing' paths, Create customers, register):Assets/Code/Scripts/Interactions/Interface and Controller/InteractionController.cs
             }else{
-                displayText += (" " + actionArray[i].interactionText + "\n");
+                displayText += ("  " + i.ToString() + " " + actionArray[i].interactionText + "\n");
             }
         }
 

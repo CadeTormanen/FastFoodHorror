@@ -7,6 +7,7 @@ public class CustomerOrder : MonoBehaviour
 {
     public Dialogue CustomerChain;
     public OrderTracker toTrack;
+    public string[] orderChain;
     private float cost;
     private int count;
     System.Random orderGenerator;
@@ -17,7 +18,6 @@ public class CustomerOrder : MonoBehaviour
         cost=0;
         orderGenerator= new System.Random();
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -31,7 +31,7 @@ public class CustomerOrder : MonoBehaviour
             CustomerChain.lines[2]=this.ChooseOrder();
             CustomerChain.lines[3]="You: Anything Else?";
             CustomerChain.lines[4]="Customer: No, Thank you.";
-            CustomerChain.lines[5]="You: Alright That will be $2.99";
+            CustomerChain.lines[5]="You: Alright That will be $"+this.cost.ToString();
             CustomerChain.lines[6]="You: Have a good day!";
             CustomerChain.lines[7]="...";
             //customer walk away
@@ -51,7 +51,7 @@ public class CustomerOrder : MonoBehaviour
         CustomerChain.lines[6]="You: Have a good day!";
         CustomerChain.lines[7]="...";
             //customer walk away
-        CustomerChain.StartMonologue();
+        CustomerChain.SetLines('c',8,orderChain);
     }
     private string ChooseOrder()
     {
