@@ -42,3 +42,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: monitor
+    uniqueID: 3474162003
+    locked: 0
