@@ -25,7 +25,18 @@ public class Player : MonoBehaviour
     
     [SerializeField] private InteractionController interactionController;
     [SerializeReference] private Inventory inventory;
+    [SerializeField] private Camera playerView;
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+    private ItemData.Item equippedItem;
+    private String equippedItemString;
+    public GameObject currentMonster;
+
+=======
+>>>>>>> parent of 2cb752b8 (Incorporate 'Cade/Pathing' paths, Create customers, register)
+=======
+>>>>>>> parent of 2cb752b8 (Incorporate 'Cade/Pathing' paths, Create customers, register)
     public PLAYERSTATES state       { get; set; }
     public bool scrollUpEnabled     { get; private set; }
     public bool scrollDownEnabled   { get; private set; }

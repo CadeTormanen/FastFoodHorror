@@ -35,6 +35,7 @@ public class ItemData : MonoBehaviour
     public class Item
     {
         public string id;
+        public string displayName;
         public int count;
         public int maxcount;
         public bool stackable;
@@ -42,7 +43,7 @@ public class ItemData : MonoBehaviour
         public bool keyItem;
         public GameObject model;
 
-        public Item(string id, int count, int maxcount, Sprite sprite, bool stackable = true, bool keyItem = false, GameObject model = null)
+        public Item(string id, int count, int maxcount, Sprite sprite, string dname, bool stackable = true, bool keyItem = false, GameObject model = null)
         {
             if (!stackable && count > 1)
             {
@@ -57,6 +58,7 @@ public class ItemData : MonoBehaviour
             this.maxcount   = maxcount;
             this.keyItem    = keyItem;
             this.model      = model;
+            this.displayName = dname;
         }
     }
 
@@ -76,6 +78,31 @@ public class ItemData : MonoBehaviour
         Sprite lettuceSprite       = Sprite.Create(inventoryBucketLettuceTexture, new Rect(0, 0, inventoryBucketLettuceTexture.width, inventoryBucketLettuceTexture.height), Vector2.zero);
         Sprite bunSprite           = Sprite.Create(inventoryBucketBunTexture, new Rect(0, 0, inventoryBucketBunTexture.width, inventoryBucketBunTexture.height), Vector2.zero);
         Sprite emptySprite         = Sprite.Create(inventoryBucketEmptyTexture, new Rect(0, 0, inventoryBucketEmptyTexture.width, inventoryBucketEmptyTexture.height), Vector2.zero);
+<<<<<<< HEAD
+<<<<<<< HEAD
+        Sprite fryRawSprite        = Sprite.Create(inventoryBucketFryRawTexture, new Rect(0, 0, inventoryBucketFryRawTexture.width, inventoryBucketFryRawTexture.height), Vector2.zero);
+        Sprite fryCookedSprite     = Sprite.Create(inventoryBucketFryCookedTexture, new Rect(0, 0, inventoryBucketFryCookedTexture.width, inventoryBucketFryCookedTexture.height), Vector2.zero);
+            
+        //name(string)   count(int)   max-count(int)   sprite(Sprite)   stackable(bool)?   keyitem(bool)?   model(gameobject)?
+        map.Add("patty_raw",      new Item("patty_raw", 1, 12,pattyRawSprite, "Raw Patty", false, false,modelPattyRaw));
+        map.Add("patty_cooked",   new Item("patty_cooked", 1, 12,pattyCookedSprite, "Cooked Patty", false, false, modelPattyCooked));
+        map.Add("cup_empty",      new Item("cup_empty", 1, 12,cupEmptySprite, "Empty Cup", false, false,modelCupEmpty));
+        map.Add("cup_full",       new Item("cup_full", 1, 12,cupFullSprite, "Soda", false, false, modelCupFull));
+        map.Add("key",            new Item("key", 1, 1,keySprite, "Key", false, true, null));
+        map.Add("empty",          new Item("empty", 1, 1,emptySprite, "EMPTY",false, false));
+        map.Add("broom",          new Item("broom", 1, 1,broomSprite, "Broom", false, false,null));
+        map.Add("bun_top",        new Item("bun_top", 1, 1,bunSprite, "Top Bun", false, false, modelBunTop));
+        map.Add("bun_bottom",     new Item("bun_bottom", 1, 1,bunSprite, "Bottom Bun", false, false, modelBunBottom));
+        map.Add("bun",            new Item("bun", 1, 1,bunSprite, "Bun", false, false, modelBunBottom));
+        map.Add("cheese",         new Item("cheese", 1, 1,cheeseSprite, "Cheese", false, false, modelCheese));
+        map.Add("ketchup",        new Item("ketchup", 1, 1,ketchupSprite, "Ketchup", false, false, modelKetchup));
+        map.Add("mustard",        new Item("mustard", 1, 1,mustardSprite, "Mustard", false, false, modelMustard));
+        map.Add("lettuce",        new Item("lettuce", 1, 1,lettuceSprite, "Lettuce", false, false,modelLettuce));
+        map.Add("french_fry_raw", new Item("french_fry_raw", 1, 1, fryRawSprite, "Raw Fries",false, false,modelFryRaw));
+        map.Add("french_fry_done",new Item("french_fry_done", 1, 1, fryCookedSprite, "French Fry",false, false,modelFryCooked));
+=======
+=======
+>>>>>>> parent of 2cb752b8 (Incorporate 'Cade/Pathing' paths, Create customers, register)
                                            //name(string)   count(int)   max-count(int)   sprite(Sprite)   stackable(bool)?   keyitem(bool)?   model(gameobject)?
         map.Add("patty_raw",      new Item("patty_raw", 1, 12,pattyRawSprite, false, false,modelPattyRaw));
         map.Add("patty_cooked",   new Item("patty_cooked", 1, 12,pattyCookedSprite, false, false, modelPattyCooked));
@@ -90,6 +117,10 @@ public class ItemData : MonoBehaviour
         map.Add("ketchup",        new Item("ketchup", 1, 1,ketchupSprite, false, false, modelKetchup));
         map.Add("mustard",        new Item("mustard", 1, 1,mustardSprite, false, false, modelMustard));
         map.Add("lettuce",        new Item("lettuce", 1, 1,lettuceSprite, false, false,modelLettuce));
+<<<<<<< HEAD
+>>>>>>> parent of 2cb752b8 (Incorporate 'Cade/Pathing' paths, Create customers, register)
+=======
+>>>>>>> parent of 2cb752b8 (Incorporate 'Cade/Pathing' paths, Create customers, register)
 
         return map;
     }
@@ -99,7 +130,7 @@ public class ItemData : MonoBehaviour
     {
         if (itemInfoMap.ContainsKey(id) == false) { return null; } //in C#, accessing non-existant keys gives runtime error.
         Item refItem = (Item) itemInfoMap[id];
-        Item newItem = new Item(refItem.id, 1, refItem.maxcount, refItem.sprite, refItem.stackable, refItem.keyItem,refItem.model);
+        Item newItem = new Item(refItem.id, 1, refItem.maxcount, refItem.sprite,refItem.displayName, refItem.stackable, refItem.keyItem,refItem.model);
         return newItem;
     }
 
