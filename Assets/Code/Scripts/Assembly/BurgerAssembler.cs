@@ -24,11 +24,7 @@ public class BurgerAssembler : MonoBehaviour, Interaction
 
     private ArrayList PlacedIngredients;
     private GameObject[] IngredientModels;
-    [SerializeField] private GameObject FryModel;
-    [SerializeField] private GameObject DrinkModel;
     private bool[] Burger;
-    private bool Drink;
-    private bool Fry;
 
     //These instance variables handles where the burger is placed relative to the tray.
     private Vector3 currentIngredientLocation;
@@ -67,20 +63,11 @@ public class BurgerAssembler : MonoBehaviour, Interaction
     public bool Possible()
     {
         ItemData.Item item = (playerInventory.GetSelectedItem()) ;
+        
         if (item == null) { return false; }
-        if (CanAdd(item.id) == true)
-        {
-            interactionText = "Place " + item.displayName;
-            return true;
-
-        }
+        if (CanAdd(item.id) == true) return true;
         return false;
-    }
-
-    public bool Ready()
-    {
-        return (ValidBurger() || Fry || Drink);
-    }
+    }            
 
     #region Burger Creation Methods
     //Creates a map that can be referenced for ingredient dependencies.
@@ -109,7 +96,6 @@ public class BurgerAssembler : MonoBehaviour, Interaction
         map.Add("cheese", Ingredients.CHEESE);
         map.Add("bun_bottom", Ingredients.LOWER_BUN);
         map.Add("bun_top", Ingredients.UPPER_BUN);
-        map.Add("bun", Ingredients.UPPER_BUN);
        
         return map;
     }
@@ -117,7 +103,7 @@ public class BurgerAssembler : MonoBehaviour, Interaction
     // Creates a burger array.
     // A burger consists of an array of ingredients,
     // where true/false denotes their prescence on the burger.
-    public static bool[] CreateEmptyBurger()
+    private bool[] CreateEmptyBurger()
     {
         int ingredientCount = Enum.GetNames(typeof(Ingredients)).Length;
         bool[] burger = new bool[ingredientCount];
@@ -152,18 +138,14 @@ public class BurgerAssembler : MonoBehaviour, Interaction
         return Burger[(int)ingredient];
     }
 
-    //What type of order is currently on the tray
-    public Order FetchContents()
-    {
-        return new Order("id", Fry, Drink, Burger);
-    }
-
     // If the prerequisites for an item have been met, add the item.
     // No changes are made if ingredient already exists on burger, or prereqs not met.
     // Returns 1 upon successful addition. Returns 0 on failed addition.
     public int Add(Ingredients ingredient)
     {
+        Debug.Log("Adding...");
         if (this.Burger[(int)ingredient] == true) return 0;
+        Debug.Log("Item not already on burger");
 
         Ingredients prereq     = (Ingredients) PrereqMap[ingredient];
         bool prereqMet         = this.Burger[(int) prereq];
@@ -194,25 +176,11 @@ public class BurgerAssembler : MonoBehaviour, Interaction
         return 0;
     }
 
-    private void AddFry()
-    {
-        FryModel.SetActive(true);
-        Fry = true;
-    }
-
-    private void AddDrink()
-    {
-        DrinkModel.SetActive(true);
-        Drink = true;
-    }
-
     // If the prerequisites for an item have been met, add the item.
     // No changes are made if ingredient already exists on burger, or prereqs not met.
     // Returns 1 upon successful addition. Returns 0 on failed addition.
     public int Add(String id)
     {
-        if (id == "french_fry_done") { AddFry()  ; return 1; }
-        if (id == "cup_full")        { AddDrink(); return 1; }
         if (!itemToIngredientMap.ContainsKey(id)) return 0;
         else return Add((Ingredients)itemToIngredientMap[id]);
     }
@@ -229,23 +197,9 @@ public class BurgerAssembler : MonoBehaviour, Interaction
         return false;
     }
 
-    public bool CanAddDrink()
-    {
-        if (Drink) return false;
-        return true;
-    }
-
-    public bool CanAddFry()
-    {
-        if (Fry) return false;
-        return true;
-    }
-
     //Can we add this ingredient?
     public bool CanAdd(String id)
     {
-        if (id == "french_fry_done") return CanAddFry();
-        if (id == "cup_full") return CanAddDrink();
         if (!itemToIngredientMap.ContainsKey(id)) return false;
         else return CanAdd((Ingredients)itemToIngredientMap[id]);
     }
@@ -263,14 +217,7 @@ public class BurgerAssembler : MonoBehaviour, Interaction
         currentIngredientLocation = currentBurgerLocation;
     }
 
-    public void ClearTray()
-    {
-        DeleteBurger();
-        Fry = false;
-        Drink = false;
-        DrinkModel.SetActive(false);
-        FryModel.SetActive(false);
-    }
+
 
     //It is possible to pass this thing off as a burger (AKA, sell it)
     public bool ValidBurger()
@@ -299,8 +246,10 @@ public class BurgerAssembler : MonoBehaviour, Interaction
         Burger              = CreateEmptyBurger();
         IngredientModels    = GetIngredientModels();
         PlacedIngredients   = new ArrayList();
+    }
 
-        DrinkModel.SetActive(false);
-        FryModel.SetActive(false);
+    public void Update()
+    {
+
     }
 }
